@@ -14,6 +14,8 @@ import { Picker } from "@react-native-picker/picker";
 import * as Location from "expo-location";
 import { FirebaseAuth, FirebaseRTDB } from "../firebase";
 import { getDatabase, ref, set } from "firebase/database";
+import MapsScreen from "./MapsScreen";
+
 
 const SelectScreen = () => {
   const [drinks, setDrinks] = useState([
