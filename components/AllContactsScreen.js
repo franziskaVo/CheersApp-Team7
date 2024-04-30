@@ -76,33 +76,37 @@ const AllContactsScreen = ({ userData, loading }) => {
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <View style={styles.container}>
         {/* Search bar */}
+        <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
           placeholder="Search by name..."
           value={searchQuery}
           onChangeText={handleSearch}
         />
+        </View>
 
         {loading ? (
           <Text>Loading user data...</Text>
-        ) : filteredData && filteredData.length > 0 ? (
+        ) : 
+        filteredData && filteredData.length > 0 ? (
           filteredData.map((user, index) => (
+            <View style={styles.container}>
             <View style={styles.userContainer} key={index}>
-              {user.profilePicture && (
+              {user.profileImage && (
                 <Image
-                  source={{ uri: user.profilePicture }}
+                  source={{ uri: user.profileImage }}
                   style={styles.profileImage}
+                  onError={(e) => console.log("Error loading image:", e.nativeEvent.error)}
                 />
               )}
               <Text style={styles.userInfo}>Name: {user.name}</Text>
               <Text style={styles.userInfo}>Age: {user.age}</Text>
               <Text style={styles.userInfo}>Hobby: {user.hobby}</Text>
-              <Text style={styles.userInfo}>
-                Favorite Drink: {user.favoriteDrink}
-              </Text>
+              <Text style={styles.userInfo}>Favorite Drink: {user.favoriteDrink}</Text>
+            </View>
               {/* Add Friend button */}
-              <TouchableOpacity onPress={() => addToFriendList(user)}>
-                <Text style={styles.addFriendButton}>Add Friend</Text>
+              <TouchableOpacity  style={styles.addToFavoritesButton} onPress={() => addToFriendList(user)}>
+                <Text style={styles.buttonText} >Add Friend</Text>
               </TouchableOpacity>
             </View>
           ))
@@ -119,17 +123,25 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   container: {
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
+    //justifyContent: "center",
+    //alignItems: "center",
+    //paddingHorizontal: 20,
+    backgroundColor: "#ffffff",
   },
   userContainer: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
+    //flexDirection:'row',
+    //alignItems:'center',
+    borderWidth: 2,
+    borderColor: "#f5b5bf",
+    borderRadius: 15,
     padding: 10,
     marginBottom: 10,
-    width: "100%",
+    backgroundColor:'#fbd6dc',
+    marginLeft:10,
+    marginRight:10,
+    marginTop:5,
+    width: 370,
+    //height:120,
   },
   userInfo: {
     marginBottom: 5,
@@ -140,18 +152,39 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginBottom: 10,
   },
-  addFriendButton: {
-    marginTop: 5,
-    color: "blue", // You can style this button as needed
-    textDecorationLine: "underline",
-  },
-  searchInput: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
+  addToFavoritesButton: {
+    alignItems:'center',
+    backgroundColor: "#f43f5e",
+    width:'40%',
+    textAlign:'center',
+    fontSize: 10,
+    fontWeight: 'bold',
     padding: 10,
-    marginBottom: 10,
-    width: "100%",
+    borderWidth: 1,
+    borderColor:"#f43f5e",
+    borderRadius: 10,
+    marginBottom:20,
+    marginTop:5,
+    marginLeft:10,
+    //marginLeft: "auto",
+  },
+  buttonText:{
+    color: "#ffffff",
+    fontWeight:'bold',
+  },
+  searchContainer: {
+    justifyContent:'center',
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+    marginTop: 15,
+  },
+  searchInput: {   
+    //borderColor: "#fcb5bd",
+    backgroundColor:'#fbd6dc',
+    borderRadius: 20,
+    padding: 15,
+    width: "97%",
   },
 });
 

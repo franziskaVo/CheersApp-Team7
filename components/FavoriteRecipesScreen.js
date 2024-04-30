@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, FlatList, StyleSheet, Pressable, Alert } from "react-native";
+import { View, Text, FlatList, StyleSheet, Pressable, Alert,TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from '@react-navigation/native';
 
-const FavoriteRecipesScreen = () => {
+const FavoriteRecipesScreen = (cocktail) => { //cocktail was not in the brackets I think
   const [favorites, setFavorites] = useState([]);
   const navigation = useNavigation();
 
@@ -36,6 +36,7 @@ const FavoriteRecipesScreen = () => {
     }
   };
 
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Favorite Drinks</Text>
@@ -44,17 +45,22 @@ const FavoriteRecipesScreen = () => {
         renderItem={({ item }) => (
           <View style={styles.favoriteItem}>
             <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.info}>Alcohol: {item.alcohol}</Text>
-            <Text style={styles.info}>Glass: {item.glass}</Text>
+            <Text style={styles.infoHeader}>Alcohol:</Text>
+            <Text style={styles.info}>{item.alcohol}</Text>
+            <Text style={styles.infoHeader}>Glass:</Text>
+            <Text style={styles.info}>{item.glass}</Text>
+            <Text style={styles.infoHeader}>Ingrediants:</Text>
+            <Text style={styles.info}>{item.ingredients}</Text>
+            <Text style={styles.infoHeader}>Instructions:</Text>
+            <Text style={styles.info}>{item.instructions}</Text>
           </View>
         )}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.listContainer}
         ListEmptyComponent={<Text style={styles.emptyText}>No favorite drinks yet.</Text>}
       />
-      {/* Button to clear favorites list */}
       <Pressable style={styles.clearButton} onPress={clearFavoritesList}>
-        <Text style={styles.scoreButtonText}>CLEAR LIST</Text>
+        <Text style={styles.clearButtonText}>CLEAR LIST</Text>
       </Pressable>
     </View>
   );
@@ -64,48 +70,74 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    alignItems:'center',
+    backgroundColor:'#ffffff'
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 20,
   },
+  infoText:{
+    //fontWeight:'bold',
+    textAlign:'center',
+    fontSize:14,
+    padding:10,
+  },
   favoriteItem: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    padding: 10,
+    borderWidth: 2,
+    borderColor: "#f43f5e",
+    borderRadius: 20,
+    padding: 20,
     marginBottom: 10,
+    backgroundColor:'#f5b5bf',
+    width: 350,
   },
   name: {
     fontSize: 18,
     fontWeight: "bold",
+    textDecorationLine:'underline',
+  },
+  infoHeader: {
+    fontWeight:'bold',
+    fontSize: 15,
+    color: "#000000",
+    paddingTop:5,
+    //paddingBottom:2,
   },
   info: {
-    fontSize: 16,
-    color: "#666",
+    fontSize: 13,
+    color: "#000000",
+    paddingBottom:1,
   },
   listContainer: {
     flexGrow: 1,
+    
   },
   emptyText: {
     fontSize: 16,
     textAlign: "center",
   },
   clearButton: {
+    width: 250,
     flexDirection: "row",
-    padding: 10,
-    backgroundColor: "#8b819b",
-    width: 160,
-    borderRadius: 15,
-    justifyContent: 'center',
+    //padding: 10,
+    backgroundColor: "#f43f5e",
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginBottom: 30,
+    marginTop: 25,
+    borderWidth:4,
+    borderColor:'#f43f5e',
     alignItems: 'center',
+    justifyContent: 'center',
     alignContent: 'center'
   },
-  scoreButtonText: {
+  clearButtonText: {
     textAlign:'center',
     color:"#ffffff",
-    fontSize: 18,
+    fontSize: 16,
+    fontWeight:'bold',
   },
 });
 

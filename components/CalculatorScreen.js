@@ -194,8 +194,12 @@ const CalculatorScreen = () => {
       </View>
 
       <View style={styles.buttonContainer}>
-        <Button title="Calculate BAC" onPress={calculateBAC} />
-        <Button title="Clear" onPress={clearInputs} />
+        <Button title="Calculate BAC" color="#ffffff" onPress={calculateBAC} />
+        
+      </View>
+      <View style={styles.buttonContainer}>
+       
+        <Button title="Clear" color="#ffffff" onPress={clearInputs} />
       </View>
       {result !== "" && (
         <Text style={styles.result}>
@@ -213,6 +217,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 20,
     paddingHorizontal: 30,
+    backgroundColor: "#ffffff",
   },
   inputContainer: {
     flexDirection: "row",
@@ -223,15 +228,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginRight: 10,
+    color:"#ff6d7e",
   },
   input: {
     flex: 2,
-    borderWidth: 1,
-    borderColor: "#ccc",
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    //borderWidth: 1,
+    //borderColor: "#fcb5bd",
     paddingVertical: 12,
     paddingHorizontal: 16,
-    borderRadius: 8,
-    backgroundColor: "#f9f9f9",
+    borderRadius: 20,
+    //backgroundColor: "#f9f9f9",
   },
   inputText: {
     fontSize: 16,
@@ -239,8 +246,8 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: "100%",
-    backgroundColor: "#f9f9f9",
-    borderRadius: 8,
+    //backgroundColor: "#f9f9f9",
+    //borderRadius: 8,
     marginTop: 8,
   },
   slider: {
@@ -254,9 +261,15 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    //justifyContent: "space-between",
     width: "100%",
     marginTop: 20,
+    backgroundColor: "#f43f5e",
+    borderWidth: 4,
+    borderColor:"#f43f5e",
+    //alignItems: 'center',
+    //paddingVertical: 10,
+    borderRadius: 10,
   },
 });
 

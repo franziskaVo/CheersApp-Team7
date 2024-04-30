@@ -96,18 +96,20 @@ const FriendListScreen = ({ userId }) => {
         {friendsData && friendsData.length > 0 ? (
           friendsData.map((friend, index) => (
             <View style={styles.friendContainer} key={index}>
-              {friend.profilePicture && (
+              {friend.profileImage && (
                 <Image
-                  source={{ uri: friend.profilePicture }}
+                  source={{ uri: friend.profileImage }}
                   style={styles.profileImage}
                 />
               )}
-              <Text style={styles.friendInfo}>Name: {friend.name}</Text>
-              <Text style={styles.friendInfo}>Age: {friend.age}</Text>
-              <Text style={styles.friendInfo}>Hobby: {friend.hobby}</Text>
-              <Text style={styles.friendInfo}>
-                Favorite Drink: {friend.favoriteDrink}
-              </Text>
+              <Text style={styles.friendInfoHeader}>Name:</Text>
+              <Text style={styles.friendInfo}>{friend.name}</Text>
+              <Text style={styles.friendInfoHeader}>Age:</Text>
+              <Text style={styles.friendInfo}>{friend.age}</Text>
+              <Text style={styles.friendInfoHeader}>Hobby:</Text>
+              <Text style={styles.friendInfo}>{friend.hobby}</Text>
+              <Text style={styles.friendInfoHeader}>Favorite Drink:</Text>
+              <Text style={styles.friendInfo}>{friend.favoriteDrink}</Text>
             </View>
           ))
         ) : (
@@ -129,6 +131,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 20,
+    backgroundColor: "#ffffff",
   },
   title: {
     fontSize: 20,
@@ -136,15 +139,24 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   friendContainer: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: "#f5b5bf",
+    borderRadius: 15,
     padding: 10,
     marginBottom: 10,
     width: "100%",
+    backgroundColor:'#fbd6dc',
+  },
+  friendInfoHeader: {
+    fontWeight:'bold',
+    fontSize: 15,
+    color: "#000000",
+    paddingTop:5,
   },
   friendInfo: {
-    marginBottom: 5,
+    fontSize: 15,
+    color: "#000000",
+    paddingBottom:1,
   },
   profileImage: {
     width: 100,
@@ -154,18 +166,24 @@ const styles = StyleSheet.create({
   },
   clearButton: {
     flexDirection: "row",
-    padding: 10,
-    backgroundColor: "#8b819b",
-    width: 160,
-    borderRadius: 15,
-    justifyContent: 'center',
+    width: 250,
+    //padding: 10,
+    backgroundColor: "#f43f5e",
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginBottom: 30,
+    marginTop: 25,
+    borderWidth:4,
+    borderColor:'#f43f5e',
     alignItems: 'center',
+    justifyContent: 'center',
     alignContent: 'center'
   },
   scoreButtonText: {
     textAlign:'center',
     color:"#ffffff",
-    fontSize: 18,
+    fontSize: 16,
+    fontWeight:'bold',
   },
 });
 

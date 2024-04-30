@@ -12,10 +12,8 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import * as Location from "expo-location";
-import { FirebaseAuth, FirebaseRTDB } from "../firebase";
-import { getDatabase, ref, set } from "firebase/database";
-import MapsScreen from "./MapsScreen";
-
+import { FirebaseAuth, FirebaseRTDB, FirebaseFirestore } from "../firebase";
+import { ref, set } from "firebase/database";
 
 const SelectScreen = () => {
   const [drinks, setDrinks] = useState([
@@ -88,7 +86,7 @@ const SelectScreen = () => {
     {
       name: "Wine",
       selected: false,
-      image: require("../pictures/Mocktail.png"),
+      image: require("../pictures/Wine.png"),
       style: styles.drinkImage,
     },
   ]);
@@ -105,53 +103,36 @@ const SelectScreen = () => {
   const [drinkPickerVisible, setDrinkPickerVisible] = useState(false);
   const [timePickerVisible, setTimePickerVisible] = useState(false);
   const [location, setLocation] = useState(null);
-  const [userLocation, setUserLocation] = useState(null);
-
+  
   const navigation = useNavigation();
 
   const handleNavigateToRecipes = () => {
     navigation.navigate("RecipeScreen");
   };
 
+  const getLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert("Permission to access location was denied");
+      setLocationPermission(false);
+      return;
+    }
+
+    try {
+      let locationData = await Location.getCurrentPositionAsync({});
+      setLocation(locationData.coords); // Update location with coordinates
+    } catch (error) {
+      console.error("Error getting location:", error.message);
+      Alert.alert("Error", "Failed to get location");
+    }
+  };
+
+  // Trigger getLocation when component mounts
   useEffect(() => {
-    // Request permission to access the user's location
-    const getLocation = async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        console.error("Permission to access location was denied");
-        return;
-      }
-
-      // Get the user's current location
-      try {
-        let location = await Location.getCurrentPositionAsync({});
-        setUserLocation(location.coords);
-
-        // Store the user's location in Firebase Realtime Database
-        //  const user = FirebaseAuth.currentUser;
-        //  if (user) {
-        //    await set(ref(FirebaseRTDB, `users/${user.uid}/location`), {
-        //      latitude: location.coords.latitude,
-        //      longitude: location.coords.longitude
-        //    });
-        //  }
-      } catch (error) {
-        console.error("Error getting user's location:", error.message);
-        Alert.alert("Error", "Failed to get user's location.");
-      }
-    };
-
     getLocation();
   }, []);
 
-  // Trigger getLocation when component mounts
-  // useEffect(() => {
-  //   getLocation();
-  // }, []);
-
-  // useFocusEffect(() => {
-  //   getLocation();
-  // });
+  
 
   const selectDrink = (drink) => {
     const updatedDrinks = drinks.map((d) =>
@@ -170,46 +151,33 @@ const SelectScreen = () => {
     setTimePickerVisible(false);
   };
 
+
+
+
+
+
   const saveDataToRealtimeDB = async () => {
     try {
       const user = FirebaseAuth.currentUser;
 
-      if (userLocation) {
-        const currentDate = new Date();
-        const timestamp = currentDate.toISOString();
-
-        // const db = getDatabase(); // Initialize the Realtime Database instance
-
+      if (user) {
         // Save data to Realtime Database
         await set(ref(FirebaseRTDB, `select/${user.uid}`), {
           userId: user.uid,
-          selectedDrink: selectedDrink ? selectedDrink.name : null, // Check if selectedDrink is not null
+          selectedDrink: selectedDrink ? selectedDrink.name : null,
           selectedTime: selectedTime,
-          location: {
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude
-          },
-          timestamp: timestamp,
+          location: location, // Update to use the location state
+
+          timestamp: new Date().toISOString(),
         });
 
+        console.log(location);
+
+        // Reset selections and navigate
         setSelectedDrink(null);
         setSelectedTime(null);
-        setUserLocation(null);
-
-        const updatedDrinks = drinks.map((drink) => ({
-          ...drink,
-          selected: false,
-        }));
-        setDrinks(updatedDrinks);
-
-
-        console.log("Location:", userLocation); // Log the location
-
-
-        navigation.navigate("Maps", {
-          selectedDrink: selectedDrink ? selectedDrink.name : null, // Pass selectedDrink name if not null
-          location: userLocation,
-        });
+        setLocation(null);
+        navigation.navigate("Maps", { location: location });
       } else {
         console.error("User is not authenticated.");
         Alert.alert("Error", "User is not authenticated.");
@@ -221,6 +189,9 @@ const SelectScreen = () => {
   };
 
   
+
+
+
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -274,7 +245,14 @@ const SelectScreen = () => {
             )}
           </View>
         </View>
-        <TouchableOpacity style={styles.button} onPress={saveDataToRealtimeDB}>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            (!selectedDrink || !selectedTime) && styles.button,  //vorheriger style disabeldButton
+          ]}
+          onPress={saveDataToRealtimeDB}
+          disabled={!selectedDrink || !selectedTime}
+        >
           <Text style={styles.buttonText}>Add Drink</Text>
         </TouchableOpacity>
       </View>
@@ -292,7 +270,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#ffffff",
     paddingHorizontal: 20,
   },
   title: {
@@ -304,13 +282,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    marginBottom: 20,
+    marginBottom: 15,
   },
   drinkOption: {
     alignItems: "center",
     marginHorizontal: 5,
     marginBottom: 10,
-    width: "23%",
+    width: "25%",
+    height:"25%",
     borderRadius: 8,
   },
   drinkName: {
@@ -323,15 +302,19 @@ const styles = StyleSheet.create({
     // marginBottom: 5,
   },
   selectedOption: {
-    backgroundColor: "#6FCF97",
+    //backgroundColor: "#6FCF97",
+    backgroundColor:'#f5b5bf',
   },
   button: {
-    backgroundColor: "#6FCF97",
+    backgroundColor: "#f43f5e",
+    width: 250,
+    borderWidth: 4,
+    borderColor:"#f43f5e",
+    alignItems: 'center',
     paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    marginBottom: 35,
-    marginTop: 20,
+    borderRadius: 10,
+    marginBottom: 30,
+    marginTop: 25,
   },
   buttonText: {
     color: "white",
@@ -344,7 +327,7 @@ const styles = StyleSheet.create({
   selectedTime: {
     height: 50,
     width: 200,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#f5b5bf",
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
@@ -361,6 +344,10 @@ const styles = StyleSheet.create({
   },
   pickerButtonContainer: {
     marginBottom: 50, // Adjust this value as needed
+  },
+  disabledButton: {
+    backgroundColor: "#ccc", // You can change this color to visually indicate the disabled state
+    // Any other styles you want to apply to the disabled button
   },
 });
 

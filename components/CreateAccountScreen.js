@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Alert,
   StatusBar,
+  Platform,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -16,6 +17,7 @@ import { auth, firestore, storage, db } from "../firebase";
 import { setDoc, doc } from "firebase/firestore";
 import { ref, put, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Ionicons } from "@expo/vector-icons"; // Import Ionicons for the back button
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 
 const CreateAccountScreen = ({
   navigation,
@@ -70,6 +72,11 @@ const CreateAccountScreen = ({
       );
 
       handleUserId(userCredential);
+      //delet here to come to previous version
+      // Upload image to Firebase Storage
+      const imageRef = ref(storage, `profile_images/${userCredential.user.uid}`);
+      const snapshot = await putString(imageData, 'data_url');
+      const downloadURL = await getDownloadURL(imageRef);
 
       await setDoc(doc(db, "user", userCredential.user.uid), {
         userId: userCredential.user.uid,
@@ -78,7 +85,7 @@ const CreateAccountScreen = ({
         age: age,
         hobby: hobby,
         favoriteDrink: favoriteDrink,
-        profileImage: profileImage,
+        profileImage: downloadURL, //change to profileImage 
       });
 
       navigation.navigate("Login");
@@ -90,13 +97,19 @@ const CreateAccountScreen = ({
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      {/*<StatusBar barStyle="dark-content" />*/}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
       </View>
-      <View style={styles.content}>
+      <KeyboardAwareScrollView
+       /*style={styles.content}*/
+       /*style={styles.container}*/
+       contentContainerStyle={styles.scrollViewContent}
+      extraScrollHeight={Platform.select({ ios: 50, android: 0 })}
+      enableOnAndroid={true}
+      >
         <Text style={styles.label}>Email:</Text>
         <TextInput
           style={styles.input}
@@ -143,13 +156,15 @@ const CreateAccountScreen = ({
           placeholder="Enter your favorite drink"
         />
         <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
-          <Text style={styles.imagePickerText}>Select Profile Picture</Text>
+          <Text style={styles.buttonText}>Select Profile Picture</Text>
         </TouchableOpacity>
         {profileImage && (
           <Image source={{ uri: profileImage }} style={styles.profileImage} />
         )}
-        <Button title="Create Account" onPress={handleCreateAccount} />
-      </View>
+        <TouchableOpacity style={styles.imagePicker} onPress={handleCreateAccount}>
+          <Text style={styles.buttonText}>CreateAccount</Text>
+        </TouchableOpacity>
+      </KeyboardAwareScrollView>
     </View>
   );
 };
@@ -164,36 +179,56 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 35,
   },
   content: {
     flex: 1,
-    justifyContent: "center",
+    //justifyContent: "center",
+    //alignItems: "center",
+    //marginTop: 20, // Adjust the content position
+  },
+  scrollViewContent: {
     alignItems: "center",
-    marginTop: 20, // Adjust the content position
+    justifyContent: "center",
+    paddingTop: 20, // Adjust the content position
   },
   label: {
     fontWeight: "bold",
     marginBottom: 5,
+    color:'#ff6d7e'
+    
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
+    //borderWidth: 1,
+    //borderColor: "#fcb5bd",
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    borderRadius: 20,
+    padding:20,
+    //paddingVertical: 12,
+    //paddingHorizontal: 16,
     marginBottom: 20,
     width: "100%",
+    
   },
   imagePicker: {
-    backgroundColor: "#3498db",
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 20,
+    backgroundColor: "#f43f5e",
+    width: 250,
+    borderWidth: 4,
+    borderColor: "#f43f5e",
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+    marginTop: 10,
   },
   imagePickerText: {
     color: "#fff",
     textAlign: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
   },
   profileImage: {
     width: 100,

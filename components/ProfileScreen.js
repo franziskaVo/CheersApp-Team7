@@ -136,31 +136,42 @@ const ProfileScreen = ({
                   />
                 </View>
               </TouchableOpacity>
-              <Text style={styles.userInfo}>Name: {userData[0].name}</Text>
-              <Text style={styles.userInfo}>Email: {email}</Text>
-              <View style={styles.passwordContainer}>
-                <Text style={styles.userInfo}>
-                  Password: {showPassword ? password : "******"}
-                </Text>
-                <TouchableOpacity
-                  onPress={() => setShowPassword(!showPassword)}
-                >
+
+              <Text style={styles.userInfo}> Name: </Text>
+              <Text style={styles.userInfo1}>{userData[0].name}</Text>
+              
+              <Text style={styles.userInfo}> Email: </Text>
+              <Text style={styles.userInfo1}>{email}</Text>
+
+              {/*<View style={styles.passwordContainer}>*/}
+                <Text style={styles.userInfo}> Password: </Text>
+                <Text style={styles.userInfo1}>
+                  {showPassword ? password : "******"}
+                  <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                   {showPassword ? (
-                    <FontAwesome5 name="eye" size={15} color="#007bff" />
+                    <FontAwesome5 name="eye" size={15} color="#f43f5e" paddingLeft={30} paddingVertical={15}/>
                   ) : (
-                    <FontAwesome5 name="eye-slash" size={15} color="#007bff" />
+                    <FontAwesome5 name="eye-slash" size={15} color="#f43f5e" paddingLeft={30} paddingVertical={15}/>
                   )}
                 </TouchableOpacity>
-              </View>
-              <Text style={styles.userInfo}>Age: {userData[0].age}</Text>
-              <Text style={styles.userInfo}>Hobby: {userData[0].hobby}</Text>
-              <Text style={styles.userInfo}>
-                Favorite Drink: {userData[0].favoriteDrink}
-              </Text>
+                </Text>
+                
+              {/*</View>*/}
+
+              <Text style={styles.userInfo}> Age: </Text>
+              <Text style={styles.userInfo1}> {userData[0].age}</Text>
+
+              <Text style={styles.userInfo}> Hobby: </Text>
+              <Text style={styles.userInfo1}> {userData[0].hobby}</Text>
+
+
+              <Text style={styles.userInfo}> Favorite Drink: </Text>
+              <Text style={styles.userInfo1}>{userData[0].favoriteDrink}</Text>
             </>
           )}
           {editing && (
             <>
+            <View style={styles.profileImageContainer}>
               <TouchableOpacity onPress={pickImage}>
                 <Image
                   style={styles.profileImage}
@@ -173,14 +184,17 @@ const ProfileScreen = ({
                   style={styles.cameraIcon}
                 />
               </TouchableOpacity>
+            </View>
+            <Text style={styles.userInfo}> Name: </Text>
               <TextInput
-                style={styles.input}
+                style={styles.userInfo1}
                 value={editedUserData.name}
                 onChangeText={(text) => handleChange("name", text)}
                 placeholder="Enter new name"
               />
+              <Text style={styles.userInfo}> Email: </Text>
               <TextInput
-                style={styles.input}
+                style={styles.userInfo1}
                 value={editedEmail}
                 onChangeText={(text) => setEditedEmail(text)}
                 placeholder="Enter new email"
@@ -188,8 +202,9 @@ const ProfileScreen = ({
               />
 
               {/* Password section */}
+              <Text style={styles.userInfo}> Password: </Text>
               <TextInput
-                style={styles.input}
+                style={styles.userInfo1}
                 value={editedPassword}
                 onChangeText={(text) => setEditedPassword(text)}
                 placeholder="Enter new password"
@@ -201,13 +216,14 @@ const ProfileScreen = ({
                 disabled={!editing}
               >
                 <FontAwesome5
-                  name={showPassword ? "eye-slash" : "eye"}
-                  size={24}
-                  color="#007bff"
+                  name={showPassword ? "eye" : "eye-slash"}
+                  size={20}
+                  color="#f43f5e"
                 />
               </TouchableOpacity>
+              <Text style={styles.userInfo}> Age: </Text>
               <TextInput
-                style={styles.input}
+                style={styles.userInfo1}
                 value={editedUserData.age.toString()}
                 onChangeText={(text) =>
                   handleChange("age", parseInt(text) || 0)
@@ -215,22 +231,30 @@ const ProfileScreen = ({
                 placeholder="Enter new age"
                 keyboardType="numeric"
               />
+              <Text style={styles.userInfo}> Hobby: </Text>
               <TextInput
-                style={styles.input}
+                style={styles.userInfo1}
                 value={editedUserData.hobby}
                 onChangeText={(text) => handleChange("hobby", text)}
                 placeholder="Enter new hobby"
               />
+              <Text style={styles.userInfo}> Favorite Drink: </Text>
               <TextInput
-                style={styles.input}
+                style={styles.userInfo1}
                 value={editedUserData.favoriteDrink}
                 onChangeText={(text) => handleChange("favoriteDrink", text)}
                 placeholder="Enter new favorite drink"
               />
-              <Button title="Save" onPress={handleSave} />
+              <TouchableOpacity style={styles.button} onPress={handleSave} >
+                <Text style={styles.buttonText}>Save</Text>
+                </TouchableOpacity>
             </>
           )}
-          {!editing && <Button title="Edit" onPress={handleEdit} />}
+          {!editing && 
+          <TouchableOpacity style={styles.button} onPress={handleEdit}>  
+          <Text style={styles.buttonText}>Edit</Text>
+          </TouchableOpacity>
+          }
         </View>
       ) : (
         <Text>No user data available.</Text>
@@ -244,19 +268,51 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
+    backgroundColor: "#ffffffff",
   },
   userContainer: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    width: "100%",
+    marginBottom: 5,
     alignItems: "center",
+    justifyContent:'center'
+  },
+  button:{
+    alignItems:'center',
+    backgroundColor: "#f43f5e",
+    width:200,
+    textAlign:'center',
+    fontSize: 10,
+    fontWeight: 'bold',
+    padding: 10,
+    borderWidth: 1,
+    borderColor:"#f43f5e",
+    borderRadius: 10,
+    marginBottom:20,
+    marginTop:5,
+  },
+  buttonText:{
+    color: "#ffffff",
+    fontWeight:'bold',
   },
   userInfo: {
-    marginBottom: 5,
+    marginBottom: 6,
+    fontSize:16,
+    textAlign: 'center',
+    fontWeight: "bold",
+  },
+  userInfo1: {
+    //textAlign:'center',
+    height:40, 
+    width:250,
+    borderColor:"#f5b5bf",
+    padding:10,
+    //backgroundColor:"#f5b5bf",
+    borderWidth: 1,
+    //borderRadius: 6,
+    //marginVertical: 3,
+    justifyContent: "center",
+    //paddingLeft: 10,
+    borderRadius: 20,
+    //paddingVertical:10,
   },
   profileImage: {
     width: 100,
@@ -265,8 +321,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   passwordContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    //flexDirection: "row",
+    //alignItems: "center",
   },
   input: {
     borderWidth: 1,

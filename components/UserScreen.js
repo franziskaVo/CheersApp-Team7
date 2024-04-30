@@ -31,7 +31,7 @@ const UserScreen = ({
           />
         )}
       </Tab.Screen>
-      <Tab.Screen name="Journey" component={JourneyScreen} />
+      
     </Tab.Navigator>
   );
 };
