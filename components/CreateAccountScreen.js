@@ -72,11 +72,11 @@ const CreateAccountScreen = ({
       );
 
       handleUserId(userCredential);
-      //delet here to come to previous version
+      //changed here form frist come to previous version
       // Upload image to Firebase Storage
-      const imageRef = ref(storage, `profile_images/${userCredential.user.uid}`);
-      const snapshot = await putString(imageData, 'data_url');
-      const downloadURL = await getDownloadURL(imageRef);
+      // const imageRef = ref(storage, `profile_images/${userCredential.user.uid}`);
+      // const snapshot = await putString(imageData, 'data_url');
+      // const downloadURL = await getDownloadURL(imageRef);
 
       await setDoc(doc(db, "user", userCredential.user.uid), {
         userId: userCredential.user.uid,
@@ -85,7 +85,7 @@ const CreateAccountScreen = ({
         age: age,
         hobby: hobby,
         favoriteDrink: favoriteDrink,
-        profileImage: downloadURL, //change to profileImage 
+        profileImage: profileImage//downloadURL, //change to profileImage 
       });
 
       navigation.navigate("Login");

@@ -92,7 +92,6 @@ const FriendListScreen = ({ userId }) => {
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <View style={styles.container}>
-        <Text style={styles.title}>Friend List</Text>
         {friendsData && friendsData.length > 0 ? (
           friendsData.map((friend, index) => (
             <View style={styles.friendContainer} key={index}>
@@ -131,7 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 20,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f7f7f7",
   },
   title: {
     fontSize: 20,
@@ -139,23 +138,23 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   friendContainer: {
-    borderWidth: 2,
-    borderColor: "#f5b5bf",
     borderRadius: 15,
     padding: 10,
     marginBottom: 10,
-    width: "100%",
+    marginTop:20,
+    width: 330,
     backgroundColor:'#fbd6dc',
   },
   friendInfoHeader: {
     fontWeight:'bold',
     fontSize: 15,
-    color: "#000000",
+    color:'#4b4545',
     paddingTop:5,
   },
   friendInfo: {
     fontSize: 15,
-    color: "#000000",
+    color:'#4b4545',
+    //color: "#000000",
     paddingBottom:1,
   },
   profileImage: {

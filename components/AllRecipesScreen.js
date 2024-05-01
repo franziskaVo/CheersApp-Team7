@@ -14,6 +14,22 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { db, cocktailrecipy } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 
+import RumSourImage from "../pictures/RumSour.png";
+import BelmontImage from "../pictures/belmont.png";
+import CranberryPunch from "../pictures/CranberryPunch.png";
+import HibiscusSpritzImage from "../pictures/HibiscusSpritz.png";
+import CasaBlancaImage from "../pictures/Drink6.png";
+import GinTonicImage from "../pictures/Drink7.png";
+import MoscowMuleMocktailImage from "../pictures/Drink8.png";
+import BoraBoraImage from "../pictures/Drink9.png";
+import BarracudaImage from "../pictures/Drink10.png";
+import CaipirinhaImage from "../pictures/Drink11.png";
+import TequilaSunriseImage from "../pictures/Drink12.png";
+import PlanterisPunchImage from "../pictures/Drink1.png";
+import NegroniImage from "../pictures/Drink2.png";
+import MangoLassiImage from "../pictures/Drink3.png";
+import CosmopolitanImage from "../pictures/Drink4.png";
+
 
 const AllRecipesScreen = ({ cocktailData, loading }) => {
   const [searchQuery, setSearchQuery] = useState(""); // State to store search query
@@ -41,6 +57,11 @@ const AllRecipesScreen = ({ cocktailData, loading }) => {
     setFilteredData(cocktailData);
   }, [cocktailData]);
 
+
+  const renderImage = (drinkName) => {
+    // Get the image from the images object based on the drink name
+    return images[drinkName];
+  };
 
   // Store Cocktail
   const storeCocktail = async (value) => {
@@ -118,6 +139,26 @@ const saveDataInFavoritesList = async (cocktail) => {
     }
   };
 
+  const images = {
+    "Rum Sour": RumSourImage,
+    Belmont: BelmontImage,
+    "Cranberry Punch": CranberryPunch,
+    "Casa Blanca": CasaBlancaImage,
+    "Gin Tonic": GinTonicImage,
+    "Hibiscus Sprizz": HibiscusSpritzImage,
+    "Moscow Mule Mocktail": MoscowMuleMocktailImage,
+    "Bora Bora": BoraBoraImage,
+    Barracuda: BarracudaImage,
+    Caipirinha: CaipirinhaImage,
+    Cosmopolitan: CosmopolitanImage,
+    "Tequila Sunrise": TequilaSunriseImage,
+    "Planterís Punch": PlanterisPunchImage,
+    Negroni: NegroniImage,
+    "Mango Lassi": MangoLassiImage,
+
+    // Add other drinks similarly
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <View style={styles.container}>
@@ -132,14 +173,18 @@ const saveDataInFavoritesList = async (cocktail) => {
           {loading && <ActivityIndicator size="small" color="#999" />}
           
         </View>
-        <Text style={styles.infoText}>Press on cocktail box to see ingredients and preparing instructions.</Text>
 
         {filteredData && filteredData.length > 0 ? (
           filteredData.map((cocktail, index) => (
             <View key={cocktail.id} style={styles.container}>
             <TouchableOpacity onPress={() => showRecipeDetails(cocktail)}>
             <View key={cocktail.id} style={styles.cardContainer}>
-              <Image source={{ uri: cocktail.image }} style={styles.cardImage} />
+              
+            <Image
+                source={renderImage(cocktail.name)} // Use renderImage function
+                style={styles.cardImage}
+              />
+
               <View style={styles.cardTextContainer}>
                 <Text style={styles.cardTitle}>{cocktail.name}</Text>
                 <Text style={styles.cardInfo}>Alcohol: {cocktail.alcohol}</Text>
@@ -185,68 +230,62 @@ const styles = StyleSheet.create({
     //justifyContent: "center",
     //alignItems: "center",
     //paddingHorizontal: 20,
-    backgroundColor: '#ffffff'
+    backgroundColor: '#f7f7f7',
   },
   searchContainer: {
     justifyContent:'center',
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 15,
-    marginTop: 15,
+    marginBottom: 25,
+    marginTop: 20,
   },
   searchInput: {
-    // flex: 1,
-    // borderWidth: 1,
-    // borderColor: "#fcb5bd",
-    // borderRadius: 5,
-    // paddingVertical: 8,
-    // paddingHorizontal: 12,
-    //backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    backgroundColor:'#fbd6dc',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
     padding: 15,
     borderRadius: 20,
-    width: '97%',
-    //marginBottom: 20,
+    width: 330,
   },
   infoText:{
-    //fontWeight:'bold',
     textAlign:'center',
     fontSize:14,
     padding:10,
   },
   cardContainer: {
     flexDirection: "row",
+    justifyContent:'center',
     alignItems: "center",
-    borderWidth: 2,
-    borderColor: "#f43f5e",
+    //borderWidth: 2,
+    //borderColor: "#f43f5e",
     borderRadius: 15,
     marginBottom: 5,
-    marginLeft:10,
+    marginLeft:30,
     marginRight:10,
     marginTop:5,
-    width: 370,
+    width: 330,
     height:120,
-    padding: 10,
-    backgroundColor:'#f5b5bf'
+    padding: 25,
+    backgroundColor:'#f0c7ce',
   },
   cardImage: {
     width: 100,
     height: 100,
     borderRadius: 8,
-    marginRight: 10,
   },
   cardTextContainer: {
     flex: 1,
     paddingVertical: 12,
+    padding:20,
   },
   cardTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 4,
+    color:'#4b4545'
   },
   cardInfo: {
     fontSize: 14,
-    color: "#666",
+    //color: "#666",
+    color:'#4b4545'
   },
   addToFavoritesButton: {
     alignItems:'center',
@@ -261,7 +300,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom:20,
     marginTop:5,
-    marginLeft:10,
+    marginLeft:30,
     //marginLeft: "auto",
   },
   buttonText:{
@@ -284,8 +323,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 20,
     borderRadius: 10,
-    width: "80%",
-    maxHeight: "80%",
+    width: 300,
+    maxHeight: 400,
   },
   modalTitle: {
     fontSize: 20,
@@ -308,6 +347,15 @@ const styles = StyleSheet.create({
     color: "#f43f5e",
     fontSize: 16,
   },
+
+  cardImage: {
+    // Image style
+    width: 80,
+    height: 80,
+    borderRadius: 50,
+    marginRight: 10,
+  },
+  
 });
 
 export default AllRecipesScreen;

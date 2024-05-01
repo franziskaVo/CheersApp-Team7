@@ -121,7 +121,7 @@ const CalculatorScreen = () => {
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Weight (kg):</Text>
-        <Text style={[styles.input, { flex: 1 }]}>{weight}</Text>
+        <Text style={[styles.weightInput, { flex: 1 }]}>{weight}</Text>
       </View>
       <Slider
         style={styles.slider}
@@ -130,6 +130,8 @@ const CalculatorScreen = () => {
         step={1}
         value={weight}
         onValueChange={(value) => setWeight(value)}
+        maximumTrackTintColor={'#f5b5bf'}
+        minimumTrackTintColor={"#f43f5e"}
       />
 
       <View style={styles.inputContainer}>
@@ -190,17 +192,14 @@ const CalculatorScreen = () => {
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Alcohol in Grams:</Text>
-        <Text style={[styles.input, { flex: 1 }]}>{alcoholInGrams}</Text>
+        <Text style={[styles.alcoholInput, ]}>{alcoholInGrams}</Text>
       </View>
-
-      <View style={styles.buttonContainer}>
-        <Button title="Calculate BAC" color="#ffffff" onPress={calculateBAC} />
-        
-      </View>
-      <View style={styles.buttonContainer}>
-       
-        <Button title="Clear" color="#ffffff" onPress={clearInputs} />
-      </View>
+      <TouchableOpacity style={styles.button} onPress={calculateBAC}>
+            <Text style={styles.buttonText}>Calculate</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={clearInputs}>
+            <Text style={styles.buttonText}>Clear</Text>
+      </TouchableOpacity>
       {result !== "" && (
         <Text style={styles.result}>
           Blood Alcohol Concentration (per mille): {result}
@@ -217,7 +216,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 20,
     paddingHorizontal: 30,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f7f7f7",
   },
   inputContainer: {
     flexDirection: "row",
@@ -228,48 +227,72 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginRight: 10,
-    color:"#ff6d7e",
+    //color:"#ff6d7e",
+    //color:'#312d2d'
+    color:'#4b4545'
   },
   input: {
     flex: 2,
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    //borderWidth: 1,
-    //borderColor: "#fcb5bd",
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    //backgroundColor: "#f9f9f9",
+    marginTop:10,
+    marginBottom:3,
+  },
+  weightInput: {
+    flex: 1,
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 20,
-    //backgroundColor: "#f9f9f9",
+    backgroundColor: "#f7f7f7",
+    marginTop:10,
+    marginBottom:5,
+  },
+  alcoholInput: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    marginTop:10,
+    marginBottom:2,
+    backgroundColor:'#f7f7f7',
+    fontSize: 14,
+    fontWeight:'bold'
   },
   inputText: {
     fontSize: 16,
     color: "#333",
   },
   picker: {
-    width: "100%",
-    //backgroundColor: "#f9f9f9",
-    //borderRadius: 8,
+    width:250,
     marginTop: 8,
   },
   slider: {
-    width: "100%",
-    marginTop: 10,
+    width:330,
+    marginBottom:30,
   },
   result: {
     marginTop: 20,
     fontSize: 18,
     fontWeight: "bold",
   },
-  buttonContainer: {
-    flexDirection: "row",
-    //justifyContent: "space-between",
-    width: "100%",
-    marginTop: 20,
+  button: {
     backgroundColor: "#f43f5e",
+    width: 250,
     borderWidth: 4,
     borderColor:"#f43f5e",
-    //alignItems: 'center',
-    //paddingVertical: 10,
+    alignItems: 'center',
+    paddingVertical: 7, //10
     borderRadius: 10,
+    marginBottom: 20, //30
+    marginTop: 10, //25
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
 

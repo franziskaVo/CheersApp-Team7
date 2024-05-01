@@ -33,6 +33,7 @@ const AllContactsScreen = ({ userData, loading }) => {
     setFilteredData(userData);
   }, [userData]);
 
+
   // Function to store user data in AsyncStorage
   const storeUserData = async (data) => {
     try {
@@ -123,28 +124,22 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   container: {
-    //justifyContent: "center",
-    //alignItems: "center",
-    //paddingHorizontal: 20,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f7f7f7",
   },
   userContainer: {
-    //flexDirection:'row',
-    //alignItems:'center',
-    borderWidth: 2,
-    borderColor: "#f5b5bf",
     borderRadius: 15,
     padding: 10,
-    marginBottom: 10,
-    backgroundColor:'#fbd6dc',
-    marginLeft:10,
+    marginBottom: 5,
+    backgroundColor:'#f0c7ce',
+    marginLeft:30,
     marginRight:10,
     marginTop:5,
-    width: 370,
-    //height:120,
+    width: 330,
+    
   },
   userInfo: {
     marginBottom: 5,
+    color:'#4b4545'
   },
   profileImage: {
     width: 100,
@@ -163,10 +158,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor:"#f43f5e",
     borderRadius: 10,
-    marginBottom:20,
+    marginBottom:25,
     marginTop:5,
-    marginLeft:10,
-    //marginLeft: "auto",
+    marginLeft:30,
   },
   buttonText:{
     color: "#ffffff",
@@ -176,15 +170,14 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 15,
-    marginTop: 15,
+    marginBottom: 25,
+    marginTop: 20,
   },
   searchInput: {   
-    //borderColor: "#fcb5bd",
-    backgroundColor:'#fbd6dc',
-    borderRadius: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
     padding: 15,
-    width: "97%",
+    borderRadius: 20,
+    width: 330,
   },
 });
 

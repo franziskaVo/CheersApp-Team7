@@ -233,6 +233,7 @@ const SelectScreen = () => {
                 selectedValue={selectedTime}
                 onValueChange={(itemValue) => selectTime(itemValue)}
                 style={styles.picker}
+                color='#4b4545'
               >
                 {timeOptions.map((option, index) => (
                   <Picker.Item
@@ -247,7 +248,7 @@ const SelectScreen = () => {
         </View>
         <TouchableOpacity
           style={[
-            styles.button,
+            styles.addButton,
             (!selectedDrink || !selectedTime) && styles.button,  //vorheriger style disabeldButton
           ]}
           onPress={saveDataToRealtimeDB}
@@ -270,13 +271,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f7f7f7",
     paddingHorizontal: 20,
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
     marginVertical: 10,
+    color:'#4b4545',
   },
   optionsContainer: {
     flexDirection: "row",
@@ -295,6 +297,7 @@ const styles = StyleSheet.create({
   drinkName: {
     fontSize: 12,
     marginBottom: 5,
+    color:'#4b4545'
   },
   drinkImage: {
     width: 75,
@@ -311,10 +314,21 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor:"#f43f5e",
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 7, //10
     borderRadius: 10,
-    marginBottom: 30,
-    marginTop: 25,
+    marginBottom: 25, //30
+    marginTop: 50, //25
+  },
+  addButton: {
+    backgroundColor: "#f43f5e",
+    width: 250,
+    borderWidth: 4,
+    borderColor:"#f43f5e",
+    alignItems: 'center',
+    paddingVertical: 7, //10
+    borderRadius: 10,
+    marginBottom: 30, //30
+    marginTop: 18, //25
   },
   buttonText: {
     color: "white",

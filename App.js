@@ -113,7 +113,8 @@ const MainTabNavigator = ({
   profileImage,
   setProfileImage,
 }) => (
-  <Tab.Navigator
+  <Tab.Navigator 
+  initialRouteName="Select"
     screenOptions={({ route }) => ({
       // tabBarLabel: getTabLabel(route.name),
       tabBarVisible: route.state && route.state.index === 0,

@@ -46,7 +46,6 @@ const LoginScreen = ({
       // Navigate to the desired screen upon successful login
       navigation.navigate("Main", { userId: userId });
     } catch (error) {
-      console.error("Error logging in:", error.message);
       Alert.alert("Error", "Invalid email or password. Please try again.");
     }
   };
@@ -143,15 +142,16 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    padding: 20,
+    padding: 17,
     borderRadius: 20,
-    width: '97%',
+    width:320,
+    //width: '97%',
     marginBottom: 20,
   },
   input: {
     color: 'black',
   },
-  logInButton: {
+  button: {
     backgroundColor: "#f43f5e",
     width: 200,
     borderWidth: 1,
@@ -159,10 +159,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 7,
     borderRadius: 10,
-    marginBottom: 30,
+    marginBottom: 10,
     marginTop: 10,
   },
-  button: {
+  logInButton: {
     backgroundColor: "#f43f5e",
     width: 250,
     borderWidth: 4,
@@ -170,8 +170,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     borderRadius: 10,
-    marginBottom: 10,
-    marginTop: 10,
+    marginBottom: 40,
+    marginTop: 5,
   },
   buttonText: {
     color: "white",

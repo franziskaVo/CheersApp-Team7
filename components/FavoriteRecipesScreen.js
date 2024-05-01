@@ -39,7 +39,6 @@ const FavoriteRecipesScreen = (cocktail) => { //cocktail was not in the brackets
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Favorite Drinks</Text>
       <FlatList
         data={favorites}
         renderItem={({ item }) => (
@@ -71,7 +70,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     alignItems:'center',
-    backgroundColor:'#ffffff'
+    backgroundColor:'#f7f7f7'
   },
   title: {
     fontSize: 20,
@@ -85,30 +84,34 @@ const styles = StyleSheet.create({
     padding:10,
   },
   favoriteItem: {
-    borderWidth: 2,
-    borderColor: "#f43f5e",
+    //borderWidth: 2,
+    //borderColor: "#f43f5e",
     borderRadius: 20,
     padding: 20,
-    marginBottom: 10,
-    backgroundColor:'#f5b5bf',
+    marginBottom: 25,
+    backgroundColor:'#f0c7ce',
     width: 350,
   },
   name: {
     fontSize: 18,
     fontWeight: "bold",
-    textDecorationLine:'underline',
+    //textDecorationLine:'underline',
+    marginBottom:10,
+    color:'#4b4545'
   },
   infoHeader: {
     fontWeight:'bold',
     fontSize: 15,
-    color: "#000000",
+    //color: "#000000",
     paddingTop:5,
+    color:'#4b4545'
     //paddingBottom:2,
   },
   info: {
     fontSize: 13,
-    color: "#000000",
+    //color: "#000000",
     paddingBottom:1,
+    color:'#4b4545'
   },
   listContainer: {
     flexGrow: 1,
