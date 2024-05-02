@@ -254,7 +254,7 @@ const FriendListScreen = ({ userId }) => {
           <View style={styles.modalContainer}>
             {selectedFriend && (
               <View style={styles.modalContent}>
-                <Text style={styles.modalHeader}>Friend Details</Text>
+                <Text style={styles.modalTextHeader}>Friend Details</Text>
                 <Text style={styles.modalText}>
                   Name: {selectedFriend.name}
                 </Text>
@@ -269,7 +269,7 @@ const FriendListScreen = ({ userId }) => {
                   style={styles.closeButton}
                   onPress={() => setModalVisible(false)}
                 >
-                  <Text style={styles.closeButtonText}>Close</Text>
+                  <Text style={styles.closeButton}>Close</Text>
                 </Pressable>
               </View>
             )}
