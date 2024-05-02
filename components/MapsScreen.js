@@ -142,7 +142,6 @@ import { collection, getDocs } from "firebase/firestore";
 import * as Location from "expo-location"; // Import Location module
 import { moderateScale } from "../Metrics";
 import { getAuth } from "firebase/auth";
-import { moderateScale } from "../Metrics";
 
 const MapsScreen = () => {
   const [userLocations, setUserLocations] = useState([]);

@@ -341,6 +341,41 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(16),
     fontWeight:'bold',
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    //backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor:'rgba(255, 193, 193, 0.5)'
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    padding: moderateScale(20),
+    borderRadius: moderateScale(10),
+    width:moderateScale(300),
+    maxHeight: moderateScale(400),
+  },
+  modalTitle: {
+    fontSize: moderateScale(20),
+    fontWeight: "bold",
+    marginBottom: moderateScale(10),
+    textDecorationLine:'underline',
+    //color: "#f43f5e",
+  },
+  modalTextHeader: {
+    fontSize: moderateScale(16),
+    fontWeight:'bold',
+    marginBottom: moderateScale(2),
+  },
+  modalText: {
+    fontSize: moderateScale(14),
+    marginBottom: moderateScale(10),
+  },
+  closeButton: {
+    alignSelf: "flex-end",
+    color: "#f43f5e",
+    fontSize: moderateScale(16),
+  },
 });
 
 export default FriendListScreen;
