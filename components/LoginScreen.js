@@ -120,14 +120,10 @@ const styles = StyleSheet.create({
     height: '95%',
   },
   logoContainer: {
-    //flex: 1,
     marginTop: moderateScale(290),
-    //marginBottom: moderateScale(250),
-    //justifyContent: 'center',
     alignItems: 'center',
   },
   logo: {
-    //marginTop:moderateScale(290),
     height: moderateScale(125),
     width: moderateScale(125),
   },
@@ -148,7 +144,6 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(20),
     width:moderateScale(320),
     marginTop:5,
-    //width: '97%',
     marginBottom: moderateScale(20),
   },
   input: {
