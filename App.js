@@ -319,7 +319,8 @@ const MainTabNavigator = ({
     })}
   >
     <Tab.Screen name="Calculator" component={CalculatorScreen} />
-    <Tab.Screen name="Select" component={SelectScreen} />
+    <Tab.Screen
+    options={{unmountOnBlur: true}} name="Select" component={SelectScreen} />
     <Tab.Screen name="Maps" component={MapsScreen} />
     <Tab.Screen name="Contact">
       {(props) => <ContactScreen {...props} userId={userId} />}
