@@ -29,6 +29,7 @@ import PlanterisPunchImage from "../pictures/Drink1.png";
 import NegroniImage from "../pictures/Drink2.png";
 import MangoLassiImage from "../pictures/Drink3.png";
 import CosmopolitanImage from "../pictures/Drink4.png";
+import { moderateScale } from "../Metrics";
 
 
 const AllRecipesScreen = ({ cocktailData, loading }) => {
@@ -208,7 +209,7 @@ const saveDataInFavoritesList = async (cocktail) => {
             <View style={styles.modalContent}>
               <Text style={styles.modalTitle}>{selectedCocktail?.name}</Text>
               <Text style={styles.modalTextHeader}>Ingredients:</Text>
-              <Text style={styles.modalText}>{selectedCocktail?.ingredients}</Text>
+              <Text style={styles.modalText}>{selectedCocktail?.quantities}</Text>
               <Text style={styles.modalTextHeader}>Instructions:</Text>
               <Text style={styles.modalText}>{selectedCocktail?.instructions}</Text>
               <TouchableOpacity onPress={() => setShowRecipe(false)}>
@@ -227,64 +228,58 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   container: {
-    //justifyContent: "center",
-    //alignItems: "center",
-    //paddingHorizontal: 20,
     backgroundColor: '#f7f7f7',
   },
   searchContainer: {
     justifyContent:'center',
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 25,
-    marginTop: 20,
+    marginBottom: moderateScale(25),
+    marginTop: moderateScale(20),
   },
   searchInput: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    padding: 15,
-    borderRadius: 20,
-    width: 330,
+    padding: moderateScale(15),
+    borderRadius: moderateScale(20),
+    width: moderateScale(330),
   },
   infoText:{
     textAlign:'center',
-    fontSize:14,
-    padding:10,
+    fontSize:moderateScale(14),
+    padding: moderateScale(10),
   },
   cardContainer: {
     flexDirection: "row",
     justifyContent:'center',
     alignItems: "center",
-    //borderWidth: 2,
-    //borderColor: "#f43f5e",
-    borderRadius: 15,
-    marginBottom: 5,
-    marginLeft:30,
-    marginRight:10,
-    marginTop:5,
-    width: 330,
-    height:120,
-    padding: 25,
+    borderRadius: moderateScale(15),
+    marginBottom: moderateScale(5),
+    marginLeft: moderateScale(30),
+    marginRight: moderateScale(10),
+    marginTop: moderateScale(5),
+    width: moderateScale(330),
+    height:moderateScale(120),
+    padding: moderateScale(25),
     backgroundColor:'#f0c7ce',
   },
   cardImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 8,
+    width: moderateScale(100),
+    height: moderateScale(100),
+    borderRadius: moderateScale(8),
   },
   cardTextContainer: {
     flex: 1,
-    paddingVertical: 12,
-    padding:20,
+    paddingVertical: moderateScale(12),
+    padding:moderateScale(20),
   },
   cardTitle: {
-    fontSize: 18,
+    fontSize: moderateScale(18),
     fontWeight: "bold",
-    marginBottom: 4,
+    marginBottom: moderateScale(4),
     color:'#4b4545'
   },
   cardInfo: {
-    fontSize: 14,
-    //color: "#666",
+    fontSize: moderateScale(14),
     color:'#4b4545'
   },
   addToFavoritesButton: {
@@ -292,15 +287,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#f43f5e",
     width:'40%',
     textAlign:'center',
-    fontSize: 10,
+    fontSize: moderateScale(10),
     fontWeight: 'bold',
-    padding: 10,
-    borderWidth: 1,
+    padding: moderateScale(10),
+    borderWidth: moderateScale(1),
     borderColor:"#f43f5e",
-    borderRadius: 10,
-    marginBottom:20,
-    marginTop:5,
-    marginLeft:30,
+    borderRadius: moderateScale(10),
+    marginBottom: moderateScale(20),
+    marginTop: moderateScale(5),
+    marginLeft: moderateScale(30),
     //marginLeft: "auto",
   },
   buttonText:{
@@ -308,8 +303,8 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
   },
   noResultText: {
-    marginTop: 20,
-    fontSize: 16,
+    marginTop: moderateScale(20),
+    fontSize: moderateScale(16),
     color: "#999",
   },
   modalContainer: {
@@ -321,39 +316,39 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 10,
-    width: 300,
-    maxHeight: 400,
+    padding: moderateScale(20),
+    borderRadius: moderateScale(10),
+    width:moderateScale(300),
+    maxHeight: moderateScale(400),
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: moderateScale(20),
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: moderateScale(10),
     textDecorationLine:'underline',
     //color: "#f43f5e",
   },
   modalTextHeader: {
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontWeight:'bold',
-    marginBottom: 2,
+    marginBottom: moderateScale(2),
   },
   modalText: {
-    fontSize: 14,
-    marginBottom: 10,
+    fontSize: moderateScale(14),
+    marginBottom: moderateScale(10),
   },
   closeButton: {
     alignSelf: "flex-end",
     color: "#f43f5e",
-    fontSize: 16,
+    fontSize: moderateScale(16),
   },
 
   cardImage: {
     // Image style
-    width: 80,
-    height: 80,
-    borderRadius: 50,
-    marginRight: 10,
+    width: moderateScale(80),
+    height: moderateScale(80),
+    borderRadius: moderateScale(50),
+    marginRight: moderateScale(10),
   },
   
 });

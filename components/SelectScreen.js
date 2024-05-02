@@ -1,4 +1,3 @@
-// export default SelectScreen;
 import React, { useState, useEffect } from "react";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import {
@@ -14,6 +13,7 @@ import { Picker } from "@react-native-picker/picker";
 import * as Location from "expo-location";
 import { FirebaseAuth, FirebaseRTDB, FirebaseFirestore } from "../firebase";
 import { ref, set } from "firebase/database";
+import { moderateScale } from "../Metrics";
 
 const SelectScreen = () => {
   const [drinks, setDrinks] = useState([
@@ -107,7 +107,7 @@ const SelectScreen = () => {
   const navigation = useNavigation();
 
   const handleNavigateToRecipes = () => {
-    navigation.navigate("RecipeScreen");
+    navigation.navigate("COCKTAILS");
   };
 
   const getLocation = async () => {
@@ -233,7 +233,6 @@ const SelectScreen = () => {
                 selectedValue={selectedTime}
                 onValueChange={(itemValue) => selectTime(itemValue)}
                 style={styles.picker}
-                color='#4b4545'
               >
                 {timeOptions.map((option, index) => (
                   <Picker.Item
@@ -272,96 +271,93 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#f7f7f7",
-    paddingHorizontal: 20,
+    paddingHorizontal: moderateScale(20),
   },
   title: {
-    fontSize: 20,
+    fontSize: moderateScale(16),
     fontWeight: "bold",
-    marginVertical: 10,
+    marginVertical: moderateScale(10),
     color:'#4b4545',
   },
   optionsContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    marginBottom: 15,
+    marginBottom: moderateScale(15),
   },
   drinkOption: {
     alignItems: "center",
-    marginHorizontal: 5,
-    marginBottom: 10,
-    width: "25%",
-    height:"25%",
-    borderRadius: 8,
+    marginHorizontal: moderateScale(5),
+    marginBottom: moderateScale(10),
+    width: '25%', //'25%'
+    height:'25%',
+    borderRadius: moderateScale(8),
   },
   drinkName: {
-    fontSize: 12,
-    marginBottom: 5,
+    fontSize: moderateScale(12),
+    marginBottom: moderateScale(5),
     color:'#4b4545'
   },
   drinkImage: {
-    width: 75,
-    height: 75,
-    // marginBottom: 5,
+    width: moderateScale(75),
+    height: moderateScale(75),
   },
   selectedOption: {
-    //backgroundColor: "#6FCF97",
     backgroundColor:'#f5b5bf',
   },
   button: {
     backgroundColor: "#f43f5e",
-    width: 250,
+    width: moderateScale(250),
     borderWidth: 4,
     borderColor:"#f43f5e",
     alignItems: 'center',
-    paddingVertical: 7, //10
-    borderRadius: 10,
-    marginBottom: 25, //30
-    marginTop: 50, //25
+    paddingVertical: moderateScale(7), 
+    borderRadius: moderateScale(10),
+    marginBottom: moderateScale(25),
+    marginTop: moderateScale(50),
   },
   addButton: {
     backgroundColor: "#f43f5e",
-    width: 250,
-    borderWidth: 4,
+    width: moderateScale(250),
+    borderWidth: moderateScale(4),
     borderColor:"#f43f5e",
     alignItems: 'center',
-    paddingVertical: 7, //10
-    borderRadius: 10,
-    marginBottom: 30, //30
-    marginTop: 18, //25
+    paddingVertical: moderateScale(7),
+    borderRadius: moderateScale(10),
+    marginBottom: moderateScale(30),
+    marginTop: moderateScale(18),
   },
   buttonText: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: moderateScale(16),
   },
   timePickerContainer: {
     alignItems: "center",
   },
   selectedTime: {
-    height: 50,
-    width: 200,
+    height: moderateScale(50),
+    width: moderateScale(200),
     backgroundColor: "#f5b5bf",
-    borderRadius: 8,
+    borderRadius: moderateScale(8),
     justifyContent: "center",
     alignItems: "center",
-    //marginBottom: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: moderateScale(10),
   },
   selectedTimeText: {
-    fontSize: 16,
+    fontSize: moderateScale(16),
   },
   picker: {
-    height: 50,
-    width: 200,
-    marginBottom: 20,
+    height: moderateScale(50),
+    width: moderateScale(200),
+    marginBottom: moderateScale(20),
   },
   pickerButtonContainer: {
-    marginBottom: 50, // Adjust this value as needed
+    marginBottom: moderateScale(50),
   },
   disabledButton: {
-    backgroundColor: "#ccc", // You can change this color to visually indicate the disabled state
-    // Any other styles you want to apply to the disabled button
+    backgroundColor: "#ccc",
+    
   },
 });
 

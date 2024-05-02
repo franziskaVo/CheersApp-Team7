@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TextInput, Alert, Image, ImageBackground, TouchableOpacity, KeyboardAvoidingView, Platform, Keyboard } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
+import { moderateScale } from "../Metrics";
 
 
 const LoginScreen = ({
@@ -60,11 +61,11 @@ const LoginScreen = ({
       
         <ImageBackground
           style={styles.backgroundImage}
-          source={require('/Users/franziskavogele/Documents/BIS/2. Semester Finnland/AppProject/Cheers-main-latest/pictures/backgroundWhole.png')}
+          source={require('../pictures/backgroundWhole.png')}
         ></ImageBackground>
           {!keyboardOpen && (
           <View style={styles.logoContainer}>
-            <Image style={styles.logo} source={require("/Users/franziskavogele/Documents/BIS/2. Semester Finnland/AppProject/Cheers-main-latest/pictures/Logo-.png")} />
+            <Image style={styles.logo} source={require("../pictures/Logo-.png")} />
           </View>
         
       )}
@@ -113,21 +114,22 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     position: 'absolute',
-    top: 0,
-    left: 0,
+    top: moderateScale(0),
+    left: moderateScale(0),
     width: '100%',
     height: '95%',
   },
   logoContainer: {
-    flex: 1,
-    marginTop: 290,
-    marginBottom:250,
-    justifyContent: 'center',
+    //flex: 1,
+    marginTop: moderateScale(290),
+    //marginBottom: moderateScale(250),
+    //justifyContent: 'center',
     alignItems: 'center',
   },
   logo: {
-    height: 125,
-    width: 125,
+    //marginTop:moderateScale(290),
+    height: moderateScale(125),
+    width: moderateScale(125),
   },
   formContainer: {
     flex: 1,
@@ -137,52 +139,53 @@ const styles = StyleSheet.create({
   formContainerKeyboardOpen: {
     justifyContent: 'flex-start',
     alignItems:'center',
-    paddingTop: 150,
-    paddingHorizontal: 20,
+    paddingTop: moderateScale(150),
+    paddingHorizontal: moderateScale(20),
   },
   inputContainer: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    padding: 17,
-    borderRadius: 20,
-    width:320,
+    padding: moderateScale(17),
+    borderRadius: moderateScale(20),
+    width:moderateScale(320),
+    marginTop:5,
     //width: '97%',
-    marginBottom: 20,
+    marginBottom: moderateScale(20),
   },
   input: {
     color: 'black',
   },
   button: {
     backgroundColor: "#f43f5e",
-    width: 200,
-    borderWidth: 1,
+    width: moderateScale(200),
+    borderWidth: moderateScale(1),
     borderColor: "#f43f5e",
     alignItems: 'center',
-    paddingVertical: 7,
-    borderRadius: 10,
-    marginBottom: 10,
-    marginTop: 10,
+    paddingVertical: moderateScale(7),
+    borderRadius: moderateScale(10),
+    marginBottom: moderateScale(10),
+    marginTop: moderateScale(10),
   },
   logInButton: {
     backgroundColor: "#f43f5e",
-    width: 250,
-    borderWidth: 4,
+    width: moderateScale(250),
+    borderWidth: moderateScale(4),
     borderColor: "#f43f5e",
     alignItems: 'center',
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginBottom: 40,
-    marginTop: 5,
+    paddingVertical: moderateScale(10),
+    borderRadius: moderateScale(10),
+    marginBottom: moderateScale(40),
+    marginTop: moderateScale(5),
   },
   buttonText: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: moderateScale(16),
   },
   linkContainer: {
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center',
-    marginBottom: 50,
+    marginBottom: moderateScale(50),
   },
 });
 

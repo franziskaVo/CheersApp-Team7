@@ -7,9 +7,13 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
+  Alert,
+  Platform
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Slider from "@react-native-community/slider";
+import { moderateScale } from "../Metrics";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
 
 const CalculatorScreen = () => {
   const [gender, setGender] = useState("");
@@ -74,6 +78,11 @@ const CalculatorScreen = () => {
   };
 
   const calculateBAC = () => {
+    // Check if any required field is empty
+  if (!gender || !drinkType || !drinkVolume || !drinkAlcoholPercentage || !drinkAmount) {
+    Alert.alert("Please fill in all fields.");
+    return;
+  }
     const genderFactor = gender === "male" ? 0.7 : 0.6;
     const alcoholGrams =
       ((drinkVolume * drinkAlcoholPercentage) / 100) * 0.789 * drinkAmount;
@@ -95,13 +104,15 @@ const CalculatorScreen = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
+      <KeyboardAwareScrollView
+       contentContainerStyle={styles.scrollViewContent}
+      extraScrollHeight={Platform.select({ ios: 50, android: 0 })}
+      enableOnAndroid={true}
+      >
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Gender:</Text>
-        <TouchableOpacity
-          onPress={toggleGenderPicker}
-          style={[styles.input, { flex: 1 }]}
-        >
+        <TouchableOpacity onPress={toggleGenderPicker} style={styles.input}>
           <Text style={styles.inputText}>{gender || "Select gender"}</Text>
         </TouchableOpacity>
       </View>
@@ -121,7 +132,7 @@ const CalculatorScreen = () => {
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Weight (kg):</Text>
-        <Text style={[styles.weightInput, { flex: 1 }]}>{weight}</Text>
+        <Text style={styles.weightInput}>{weight}</Text>
       </View>
       <Slider
         style={styles.slider}
@@ -130,16 +141,13 @@ const CalculatorScreen = () => {
         step={1}
         value={weight}
         onValueChange={(value) => setWeight(value)}
-        maximumTrackTintColor={'#f5b5bf'}
+        maximumTrackTintColor={"#f5b5bf"}
         minimumTrackTintColor={"#f43f5e"}
       />
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Drink Type:</Text>
-        <TouchableOpacity
-          onPress={toggleDrinkTypePicker}
-          style={[styles.input, { flex: 1 }]}
-        >
+        <TouchableOpacity onPress={toggleDrinkTypePicker} style={styles.input}>
           <Text style={styles.inputText}>
             {drinkType || "Select drink type"}
           </Text>
@@ -162,18 +170,18 @@ const CalculatorScreen = () => {
       )}
 
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Drink Size (ml):</Text>
+        <Text style={styles.label}>Size (ml):</Text>
         <TextInput
-          style={[styles.input, { flex: 1 }]}
+          style={styles.input}
           value={drinkVolume.toString()}
           onChangeText={(text) => setDrinkVolume(parseInt(text) || 0)}
           keyboardType="numeric"
         />
       </View>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Drink Alcohol Percentage:</Text>
+        <Text style={styles.label}>Alcohol (%):</Text>
         <TextInput
-          style={[styles.input, { flex: 1 }]}
+          style={styles.input}
           value={drinkAlcoholPercentage.toString()}
           onChangeText={(text) =>
             setDrinkAlcoholPercentage(parseInt(text) || 0)
@@ -182,30 +190,29 @@ const CalculatorScreen = () => {
         />
       </View>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Amount of Drinks:</Text>
+        <Text style={styles.label}>Drink Amount:</Text>
         <TextInput
-          style={[styles.input, { flex: 1 }]}
+          style={styles.input}
           value={drinkAmount.toString()}
           onChangeText={(text) => setDrinkAmount(parseInt(text) || 0)}
           keyboardType="numeric"
         />
       </View>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Alcohol in Grams:</Text>
-        <Text style={[styles.alcoholInput, ]}>{alcoholInGrams}</Text>
+        <Text style={styles.label}>Alcohol (g):</Text>
+        <Text style={[styles.alcoholInput]}>{alcoholInGrams}</Text>
       </View>
+      {result !== "" && <Text style={styles.result}>Per mille: {result}</Text>}
+      <View style={styles.buttonContainer}>
       <TouchableOpacity style={styles.button} onPress={calculateBAC}>
-            <Text style={styles.buttonText}>Calculate</Text>
+        <Text style={styles.buttonText}>Calculate</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={clearInputs}>
-            <Text style={styles.buttonText}>Clear</Text>
+        <Text style={styles.buttonText}>Clear</Text>
       </TouchableOpacity>
-      {result !== "" && (
-        <Text style={styles.result}>
-          Blood Alcohol Concentration (per mille): {result}
-        </Text>
-      )}
-    </ScrollView>
+      </View>
+      </KeyboardAwareScrollView>
+    </View>
   );
 };
 
@@ -214,85 +221,96 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 20,
-    paddingHorizontal: 30,
+    //paddingVertical: moderateScale(20),
+    //paddingHorizontal: moderateScale(30),
     backgroundColor: "#f7f7f7",
   },
   inputContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: moderateScale(20),
+    //marginRight: moderateScale(10),
+    //marginLeft: moderateScale(10),
   },
   label: {
-    fontSize: 18,
+    flex:1,
+    fontSize: moderateScale(18),
+    marginRight: moderateScale(10), // Adjust this value as needed for spacing between label and input
+    textAlign: 'right', // Align the text to the right
     fontWeight: "bold",
-    marginRight: 10,
-    //color:"#ff6d7e",
-    //color:'#312d2d'
+    //marginRight: moderateScale(10),
     color:'#4b4545'
   },
   input: {
-    flex: 2,
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 10,
-    //backgroundColor: "#f9f9f9",
-    marginTop:10,
-    marginBottom:3,
-  },
+    flex:2,
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+    paddingVertical: moderateScale(12),
+    paddingHorizontal: moderateScale(16),
+    borderRadius: moderateScale(10),
+    marginTop: moderateScale(10),
+    marginBottom: moderateScale(3),
+    width: moderateScale(160),
+    marginLeft: moderateScale(5),
+    },
   weightInput: {
     flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 20,
+    paddingVertical: moderateScale(12),
+    paddingHorizontal: moderateScale(16),
+    borderRadius: moderateScale(20),
     backgroundColor: "#f7f7f7",
-    marginTop:10,
-    marginBottom:5,
+    marginTop: moderateScale(10),
+    marginBottom: moderateScale(5),
   },
   alcoholInput: {
-    flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    marginTop:10,
-    marginBottom:2,
+    flex: 2,
+    paddingVertical: moderateScale(12),
+    paddingHorizontal: moderateScale(16),
+    borderRadius: moderateScale(20),
+    marginTop: moderateScale(10),
+    marginBottom: moderateScale(2),
     backgroundColor:'#f7f7f7',
-    fontSize: 14,
+    fontSize: moderateScale(14),
     fontWeight:'bold'
   },
   inputText: {
-    fontSize: 16,
+    fontSize: moderateScale(16),
     color: "#333",
   },
   picker: {
-    width:250,
-    marginTop: 8,
+    width: moderateScale(250),
+    marginTop: moderateScale(8),
   },
   slider: {
-    width:330,
-    marginBottom:30,
+    width: moderateScale(300),
+    marginBottom: moderateScale(30),
   },
   result: {
-    marginTop: 20,
-    fontSize: 18,
+    marginTop: moderateScale(20),
+    fontSize: moderateScale(18),
     fontWeight: "bold",
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    marginTop: moderateScale(30),
   },
   button: {
     backgroundColor: "#f43f5e",
-    width: 250,
-    borderWidth: 4,
+    width: moderateScale(250),
+    borderWidth: moderateScale(4),
     borderColor:"#f43f5e",
     alignItems: 'center',
-    paddingVertical: 7, //10
-    borderRadius: 10,
-    marginBottom: 20, //30
-    marginTop: 10, //25
+    paddingVertical: moderateScale(7),
+    borderRadius: moderateScale(10),
+    marginBottom: moderateScale(20),
+    marginTop: moderateScale(10),
   },
   buttonText: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: moderateScale(16),
+  },
+  scrollViewContent: {
+    paddingTop: moderateScale(2), 
   },
 });
 

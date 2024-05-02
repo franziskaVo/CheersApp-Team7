@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, FlatList, StyleSheet, Pressable, Alert,TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from '@react-navigation/native';
+import { moderateScale } from "../Metrics";
 
 const FavoriteRecipesScreen = (cocktail) => { //cocktail was not in the brackets I think
   const [favorites, setFavorites] = useState([]);
@@ -49,7 +50,11 @@ const FavoriteRecipesScreen = (cocktail) => { //cocktail was not in the brackets
             <Text style={styles.infoHeader}>Glass:</Text>
             <Text style={styles.info}>{item.glass}</Text>
             <Text style={styles.infoHeader}>Ingrediants:</Text>
-            <Text style={styles.info}>{item.ingredients}</Text>
+            {item.quantities.map((quantities, index) => (
+              <Text key={index.toString()} style={styles.info}>
+                {quantities}
+              </Text>
+            ))}
             <Text style={styles.infoHeader}>Instructions:</Text>
             <Text style={styles.info}>{item.instructions}</Text>
           </View>
@@ -68,49 +73,42 @@ const FavoriteRecipesScreen = (cocktail) => { //cocktail was not in the brackets
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: moderateScale(20),
     alignItems:'center',
     backgroundColor:'#f7f7f7'
   },
   title: {
-    fontSize: 20,
+    fontSize: moderateScale(20),
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: moderateScale(20),
   },
   infoText:{
-    //fontWeight:'bold',
     textAlign:'center',
-    fontSize:14,
-    padding:10,
+    fontSize: moderateScale(14),
+    padding: moderateScale(10),
   },
   favoriteItem: {
-    //borderWidth: 2,
-    //borderColor: "#f43f5e",
-    borderRadius: 20,
-    padding: 20,
-    marginBottom: 25,
+    borderRadius: moderateScale(20),
+    padding: moderateScale(20),
+    marginBottom: moderateScale(25),
     backgroundColor:'#f0c7ce',
-    width: 350,
+    width: moderateScale(340),
   },
   name: {
-    fontSize: 18,
+    fontSize: moderateScale(18),
     fontWeight: "bold",
-    //textDecorationLine:'underline',
-    marginBottom:10,
+    marginBottom: moderateScale(10),
     color:'#4b4545'
   },
   infoHeader: {
     fontWeight:'bold',
-    fontSize: 15,
-    //color: "#000000",
-    paddingTop:5,
+    fontSize: moderateScale(15),
+    paddingTop: moderateScale(5),
     color:'#4b4545'
-    //paddingBottom:2,
   },
   info: {
-    fontSize: 13,
-    //color: "#000000",
-    paddingBottom:1,
+    fontSize: moderateScale(13),
+    paddingBottom: moderateScale(1),
     color:'#4b4545'
   },
   listContainer: {
@@ -118,19 +116,18 @@ const styles = StyleSheet.create({
     
   },
   emptyText: {
-    fontSize: 16,
+    fontSize: moderateScale(16),
     textAlign: "center",
   },
   clearButton: {
-    width: 250,
+    width: moderateScale(250),
     flexDirection: "row",
-    //padding: 10,
     backgroundColor: "#f43f5e",
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginBottom: 30,
-    marginTop: 25,
-    borderWidth:4,
+    paddingVertical: moderateScale(10),
+    borderRadius: moderateScale(10),
+    marginBottom: moderateScale(30),
+    marginTop: moderateScale(25),
+    borderWidth: moderateScale(4),
     borderColor:'#f43f5e',
     alignItems: 'center',
     justifyContent: 'center',
@@ -139,7 +136,7 @@ const styles = StyleSheet.create({
   clearButtonText: {
     textAlign:'center',
     color:"#ffffff",
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontWeight:'bold',
   },
 });

@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from '@react-navigation/native';
+import { moderateScale } from "../Metrics";
 
 const FriendListScreen = ({ userId }) => {
   const [friendList, setFriendList] = useState([]); // State to store friend list
@@ -129,50 +130,49 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: moderateScale(20),
     backgroundColor: "#f7f7f7",
   },
   title: {
-    fontSize: 20,
+    fontSize: moderateScale(20),
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: moderateScale(10),
   },
   friendContainer: {
-    borderRadius: 15,
-    padding: 10,
-    marginBottom: 10,
-    marginTop:20,
-    width: 330,
+    borderRadius: moderateScale(15),
+    padding: moderateScale(10),
+    marginBottom: moderateScale(10),
+    marginTop:moderateScale(20),
+    width: moderateScale(330),
     backgroundColor:'#fbd6dc',
   },
   friendInfoHeader: {
     fontWeight:'bold',
-    fontSize: 15,
+    fontSize: moderateScale(15),
     color:'#4b4545',
-    paddingTop:5,
+    paddingTop: moderateScale(5),
   },
   friendInfo: {
-    fontSize: 15,
+    fontSize: moderateScale(15),
     color:'#4b4545',
     //color: "#000000",
-    paddingBottom:1,
+    paddingBottom: moderateScale(1),
   },
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
+    width: moderateScale(100),
+    height: moderateScale(100),
+    borderRadius: moderateScale(50),
+    marginBottom: moderateScale(10),
   },
   clearButton: {
     flexDirection: "row",
-    width: 250,
-    //padding: 10,
+    width: moderateScale(250),
     backgroundColor: "#f43f5e",
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginBottom: 30,
-    marginTop: 25,
-    borderWidth:4,
+    paddingVertical: moderateScale(10),
+    borderRadius: moderateScale(10),
+    marginBottom: moderateScale(30),
+    marginTop: moderateScale(25),
+    borderWidth: moderateScale(4),
     borderColor:'#f43f5e',
     alignItems: 'center',
     justifyContent: 'center',
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
   scoreButtonText: {
     textAlign:'center',
     color:"#ffffff",
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontWeight:'bold',
   },
 });
