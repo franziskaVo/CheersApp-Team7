@@ -3,12 +3,12 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Button,
   StyleSheet,
   TextInput,
   ScrollView,
   Alert,
-  Platform
+  Platform,
+  Modal,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Slider from "@react-native-community/slider";
@@ -28,11 +28,21 @@ const CalculatorScreen = () => {
   const [drinkSize, setDrinkSize] = useState(0);
   const [drinkAmount, setDrinkAmount] = useState(0);
 
+
+  const [drinkOptionsModalVisible, setDrinkOptionsModalVisible] = useState(false);
+  const [genderOptionsModalVisible, setGenderOptionsModalVisible] = useState(false);
+
   const drinkOptions = [
-    { name: "Beer", alcoholPercentage: 5, volume: 355 }, // 355ml (12oz) of beer typically has 5% alcohol
-    { name: "Wine", alcoholPercentage: 12, volume: 150 }, // 150ml of wine typically has 12% alcohol
-    { name: "Vodka", alcoholPercentage: 40, volume: 44 }, // A standard shot of vodka (44ml) typically has 40% alcohol
+    { label: "Beer", alcoholPercentage: 5, volume: 355, value: "Beer" }, // 355ml (12oz) of beer typically has 5% alcohol
+    { label: "Wine", alcoholPercentage: 12, volume: 150, value: "Wine" }, // 150ml of wine typically has 12% alcohol
+    { label: "Vodka", alcoholPercentage: 40, volume: 44, value:"Vodka" }, // A standard shot of vodka (44ml) typically has 40% alcohol
     // Add more drink options as needed
+  ];
+
+  // Define time options
+  const genderOptions = [
+    { label: "male", value: "male" },
+    { label: "female", value: "female" },
   ];
 
   useEffect(() => {
@@ -44,22 +54,22 @@ const CalculatorScreen = () => {
     }
   }, [drinkVolume, drinkAlcoholPercentage]);
 
-  const toggleGenderPicker = () => {
-    setShowGenderPicker(!showGenderPicker);
+  const toggleDrinkOptionsModal = () => {
+    setDrinkOptionsModalVisible(!drinkOptionsModalVisible);
   };
 
-  const toggleDrinkTypePicker = () => {
-    setShowDrinkTypePicker(!showDrinkTypePicker);
+  const toggleGenderOptionsModal = () => {
+    setGenderOptionsModalVisible(!genderOptionsModalVisible);
   };
 
   const handleGenderSelect = (selectedGender) => {
     setGender(selectedGender);
-    setShowGenderPicker(false); // Hide the picker after selecting gender
+    setGenderOptionsModalVisible(false);
   };
 
   const handleDrinkTypeSelect = (selectedDrinkType) => {
     setDrinkType(selectedDrinkType);
-    setShowDrinkTypePicker(false); // Hide the picker after selecting drink type
+    setDrinkOptionsModalVisible(false);
 
     // Fetch alcohol percentage and volume based on the selected drink type
     const selectedDrink = drinkOptions.find(
@@ -91,6 +101,7 @@ const CalculatorScreen = () => {
     setResult(bac.toFixed(2));
   };
 
+
   const clearInputs = () => {
     setGender("");
     setWeight(50);
@@ -103,34 +114,46 @@ const CalculatorScreen = () => {
     setResult("");
   };
 
+
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView
-       contentContainerStyle={styles.scrollViewContent}
-      extraScrollHeight={Platform.select({ ios: 50, android: 0 })}
-      enableOnAndroid={true}
+        contentContainerStyle={styles.scrollViewContent}
+        extraScrollHeight={Platform.select({ ios: 50, android: 0 })}
+        enableOnAndroid={true}
       >
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Gender:</Text>
-        <TouchableOpacity onPress={toggleGenderPicker} style={styles.input}>
-          <Text style={styles.inputText}>{gender || "Select gender"}</Text>
-        </TouchableOpacity>
-      </View>
-      {showGenderPicker && (
-        <Picker
-          style={styles.picker}
-          selectedValue={gender}
-          onValueChange={(itemValue, itemIndex) =>
-            handleGenderSelect(itemValue)
-          }
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Gender:</Text>
+          <TouchableOpacity
+            onPress={toggleGenderOptionsModal}
+            style={styles.input}
+          >
+            <Text style={styles.inputText}>{gender || "Select gender"}</Text>
+          </TouchableOpacity>
+        </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={genderOptionsModalVisible}
+          onRequestClose={() => toggleGenderOptionsModal(false)}
         >
-          <Picker.Item label="Select Gender" value="" />
-          <Picker.Item label="Male" value="male" />
-          <Picker.Item label="Female" value="female" />
-        </Picker>
-      )}
+          <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>Select Gender</Text>
+                {genderOptions.map((option) => (
+                  <TouchableOpacity
+                    key={option.value}
+                    style={styles.timeOption}
+                    onPress={() => handleGenderSelect(option.value)}
+                  >
+                    <Text>{option.label}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+        </Modal>
 
-      <View style={styles.inputContainer}>
+        <View style={styles.inputContainer}>
         <Text style={styles.label}>Weight (kg):</Text>
         <Text style={styles.weightInput}>{weight}</Text>
       </View>
@@ -144,32 +167,39 @@ const CalculatorScreen = () => {
         maximumTrackTintColor={"#f5b5bf"}
         minimumTrackTintColor={"#f43f5e"}
       />
-
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Drink Type:</Text>
-        <TouchableOpacity onPress={toggleDrinkTypePicker} style={styles.input}>
-          <Text style={styles.inputText}>
-            {drinkType || "Select drink type"}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      {showDrinkTypePicker && (
-        <Picker
-          style={styles.picker}
-          selectedValue={drinkType}
-          onValueChange={(itemValue, itemIndex) =>
-            handleDrinkTypeSelect(itemValue)
-          }
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Drink Type:</Text>
+          <TouchableOpacity
+            onPress={toggleDrinkOptionsModal}
+            style={styles.input}
+          >
+            <Text style={styles.inputText}>
+              {drinkType || "Select drink type"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={drinkOptionsModalVisible}
+          onRequestClose={() => toggleDrinkOptionsModal(false)}
         >
-          <Picker.Item label="Select Drink Type" value="" />
-          <Picker.Item label="Beer" value="Beer" />
-          <Picker.Item label="Wine" value="Wine" />
-          <Picker.Item label="Vodka" value="Vodka" />
-          {/* Add more drink options as needed */}
-        </Picker>
-      )}
-
-      <View style={styles.inputContainer}>
+          <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>Select Drink</Text>
+                {drinkOptions.map((option) => (
+                  <TouchableOpacity
+                    key={option.value}
+                    style={styles.timeOption}
+                    onPress={() => handleDrinkTypeSelect(option.value)}
+                  >
+                    <Text>{option.label}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+        </Modal>
+        <View style={styles.inputContainer}>
         <Text style={styles.label}>Size (ml):</Text>
         <TextInput
           style={styles.input}
@@ -202,15 +232,17 @@ const CalculatorScreen = () => {
         <Text style={styles.label}>Alcohol (g):</Text>
         <Text style={[styles.alcoholInput]}>{alcoholInGrams}</Text>
       </View>
-      {result !== "" && <Text style={styles.result}>Per mille: {result}</Text>}
-      <View style={styles.buttonContainer}>
-      <TouchableOpacity style={styles.button} onPress={calculateBAC}>
-        <Text style={styles.buttonText}>Calculate</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={clearInputs}>
-        <Text style={styles.buttonText}>Clear</Text>
-      </TouchableOpacity>
-      </View>
+        {result !== "" && (
+          <Text style={styles.result}>Per mille: {result}</Text>
+        )}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={calculateBAC}>
+            <Text style={styles.buttonText}>Calculate</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={clearInputs}>
+            <Text style={styles.buttonText}>Clear</Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAwareScrollView>
     </View>
   );
@@ -221,28 +253,23 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
-    //paddingVertical: moderateScale(20),
-    //paddingHorizontal: moderateScale(30),
     backgroundColor: "#f7f7f7",
   },
   inputContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     alignItems: "center",
     marginBottom: moderateScale(20),
-    //marginRight: moderateScale(10),
-    //marginLeft: moderateScale(10),
   },
   label: {
     flex:1,
     fontSize: moderateScale(18),
-    marginRight: moderateScale(10), // Adjust this value as needed for spacing between label and input
-    textAlign: 'right', // Align the text to the right
+    marginRight: moderateScale(10),
+    textAlign: 'right',
     fontWeight: "bold",
-    //marginRight: moderateScale(10),
     color:'#4b4545'
   },
   input: {
-    flex:2,
+    flex: 2,
     backgroundColor: "rgba(0, 0, 0, 0.1)",
     paddingVertical: moderateScale(12),
     paddingHorizontal: moderateScale(16),
@@ -251,7 +278,7 @@ const styles = StyleSheet.create({
     marginBottom: moderateScale(3),
     width: moderateScale(160),
     marginLeft: moderateScale(5),
-    },
+  },
   weightInput: {
     flex: 1,
     paddingVertical: moderateScale(12),
@@ -260,17 +287,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#f7f7f7",
     marginTop: moderateScale(10),
     marginBottom: moderateScale(5),
-  },
-  alcoholInput: {
-    flex: 2,
-    paddingVertical: moderateScale(12),
-    paddingHorizontal: moderateScale(16),
-    borderRadius: moderateScale(20),
-    marginTop: moderateScale(10),
-    marginBottom: moderateScale(2),
-    backgroundColor:'#f7f7f7',
-    fontSize: moderateScale(14),
-    fontWeight:'bold'
   },
   inputText: {
     fontSize: moderateScale(16),
@@ -290,15 +306,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   buttonContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: moderateScale(30),
   },
   button: {
     backgroundColor: "#f43f5e",
     width: moderateScale(250),
     borderWidth: moderateScale(4),
-    borderColor:"#f43f5e",
-    alignItems: 'center',
+    borderColor: "#f43f5e",
+    alignItems: "center",
     paddingVertical: moderateScale(7),
     borderRadius: moderateScale(10),
     marginBottom: moderateScale(20),
@@ -310,7 +326,30 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(16),
   },
   scrollViewContent: {
-    paddingTop: moderateScale(2), 
+    paddingTop: moderateScale(2),
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor:'rgba(255, 193, 193, 0.5)'
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: moderateScale(30),
+    borderRadius: moderateScale(10),
+    width: moderateScale(300),
+    marginBottom: moderateScale(20),
+  },
+  modalTitle: {
+    fontSize: moderateScale(18),
+    fontWeight: "bold",
+    marginBottom: moderateScale(10),
+  },
+  timeOption: {
+    padding: moderateScale(10),
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
   },
 });
 

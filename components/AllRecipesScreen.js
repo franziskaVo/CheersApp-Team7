@@ -311,7 +311,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    //backgroundColor: "rgba(0, 0, 0, 0.5)",
     backgroundColor:'rgba(255, 193, 193, 0.5)'
   },
   modalContent: {
@@ -326,7 +325,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: moderateScale(10),
     textDecorationLine:'underline',
-    //color: "#f43f5e",
   },
   modalTextHeader: {
     fontSize: moderateScale(16),
@@ -342,9 +340,7 @@ const styles = StyleSheet.create({
     color: "#f43f5e",
     fontSize: moderateScale(16),
   },
-
   cardImage: {
-    // Image style
     width: moderateScale(80),
     height: moderateScale(80),
     borderRadius: moderateScale(50),

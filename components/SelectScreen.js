@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -7,11 +7,10 @@ import {
   Image,
   StyleSheet,
   ScrollView,
-  Alert,
+  Modal,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import * as Location from "expo-location";
-import { FirebaseAuth, FirebaseRTDB, FirebaseFirestore } from "../firebase";
+import { FirebaseAuth, FirebaseRTDB } from "../firebase";
 import { ref, set } from "firebase/database";
 import { moderateScale } from "../Metrics";
 
@@ -91,19 +90,14 @@ const SelectScreen = () => {
     },
   ]);
 
-  const timeOptions = [
-    { label: "15 min", value: 15 },
-    { label: "30 min", value: 30 },
-    { label: "45 min", value: 45 },
-    { label: "60 min", value: 60 },
-  ];
+
 
   const [selectedDrink, setSelectedDrink] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
-  const [drinkPickerVisible, setDrinkPickerVisible] = useState(false);
-  const [timePickerVisible, setTimePickerVisible] = useState(false);
   const [location, setLocation] = useState(null);
-  
+  const [drinkPickerVisible, setDrinkPickerVisible] = useState(false);
+
   const navigation = useNavigation();
 
   const handleNavigateToRecipes = () => {
@@ -132,7 +126,6 @@ const SelectScreen = () => {
     getLocation();
   }, []);
 
-  
 
   const selectDrink = (drink) => {
     const updatedDrinks = drinks.map((d) =>
@@ -146,34 +139,25 @@ const SelectScreen = () => {
     setDrinks(updatedDrinks);
   };
 
-  const selectTime = (time) => {
+
+  const handleTimeSelection = (time) => {
     setSelectedTime(time);
-    setTimePickerVisible(false);
+    setModalVisible(false);
   };
-
-
-
-
-
 
   const saveDataToRealtimeDB = async () => {
     try {
       const user = FirebaseAuth.currentUser;
 
       if (user) {
-        // Save data to Realtime Database
         await set(ref(FirebaseRTDB, `select/${user.uid}`), {
           userId: user.uid,
           selectedDrink: selectedDrink ? selectedDrink.name : null,
           selectedTime: selectedTime,
-          location: location, // Update to use the location state
-
+          location: location,
           timestamp: new Date().toISOString(),
         });
 
-        console.log(location);
-
-        // Reset selections and navigate
         setSelectedDrink(null);
         setSelectedTime(null);
         setLocation(null);
@@ -185,13 +169,17 @@ const SelectScreen = () => {
     } catch (error) {
       console.error("Error saving data to Realtime Database:", error.message);
       Alert.alert("Error saving data to Realtime Database:", error.message);
+
     }
   };
 
-  
-
-
-
+  // Define time options
+  const timeOptions = [
+    { label: "15 min", value: 15 },
+    { label: "30 min", value: 30 },
+    { label: "45 min", value: 45 },
+    { label: "60 min", value: 60 },
+  ];
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -219,36 +207,40 @@ const SelectScreen = () => {
         </TouchableOpacity>
         <View style={styles.timePickerContainer}>
           <Text style={styles.title}>Select Drinking Time</Text>
-          <View style={styles.pickerButtonContainer}>
-            <TouchableOpacity
-              style={styles.selectedTime}
-              onPress={() => setTimePickerVisible(true)}
-            >
-              <Text style={styles.selectedTimeText}>
-                {selectedTime ? `${selectedTime} min` : "Select Time"}
-              </Text>
-            </TouchableOpacity>
-            {timePickerVisible && (
-              <Picker
-                selectedValue={selectedTime}
-                onValueChange={(itemValue) => selectTime(itemValue)}
-                style={styles.picker}
-              >
-                {timeOptions.map((option, index) => (
-                  <Picker.Item
-                    key={index}
-                    label={option.label}
-                    value={option.value}
-                  />
+          <TouchableOpacity
+            style={styles.selectedTime}
+            onPress={() => setModalVisible(true)}
+          >
+            <Text style={styles.selectedTimeText}>
+              {selectedTime ? `${selectedTime} min` : "Select Time"}
+            </Text>
+          </TouchableOpacity>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>Select Drinking Time</Text>
+                {timeOptions.map((option) => (
+                  <TouchableOpacity
+                    key={option.value}
+                    style={styles.timeOption}
+                    onPress={() => handleTimeSelection(option.value)}
+                  >
+                    <Text>{option.label}</Text>
+                  </TouchableOpacity>
                 ))}
-              </Picker>
-            )}
-          </View>
+              </View>
+            </View>
+          </Modal>
         </View>
         <TouchableOpacity
           style={[
             styles.addButton,
-            (!selectedDrink || !selectedTime) && styles.button,  //vorheriger style disabeldButton
+            (!selectedDrink || !selectedTime) && styles.button,
           ]}
           onPress={saveDataToRealtimeDB}
           disabled={!selectedDrink || !selectedTime}
@@ -277,7 +269,6 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(16),
     fontWeight: "bold",
     marginVertical: moderateScale(10),
-    color:'#4b4545',
   },
   optionsContainer: {
     flexDirection: "row",
@@ -289,29 +280,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: moderateScale(5),
     marginBottom: moderateScale(10),
-    width: '25%', //'25%'
-    height:'25%',
+    width: '25%', 
+    height: '25%',
     borderRadius: moderateScale(8),
   },
   drinkName: {
     fontSize: moderateScale(12),
     marginBottom: moderateScale(5),
-    color:'#4b4545'
   },
   drinkImage: {
     width: moderateScale(75),
     height: moderateScale(75),
   },
   selectedOption: {
-    backgroundColor:'#f5b5bf',
+    backgroundColor: '#f5b5bf',
   },
   button: {
     backgroundColor: "#f43f5e",
     width: moderateScale(250),
     borderWidth: 4,
-    borderColor:"#f43f5e",
+    borderColor: "#f43f5e",
     alignItems: 'center',
-    paddingVertical: moderateScale(7), 
+    paddingVertical: moderateScale(7),
     borderRadius: moderateScale(10),
     marginBottom: moderateScale(25),
     marginTop: moderateScale(50),
@@ -335,7 +325,7 @@ const styles = StyleSheet.create({
   timePickerContainer: {
     alignItems: "center",
   },
-  selectedTime: {
+  selectedTime:{
     height: moderateScale(50),
     width: moderateScale(200),
     backgroundColor: "#f5b5bf",
@@ -344,20 +334,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: moderateScale(10),
   },
-  selectedTimeText: {
-    fontSize: moderateScale(16),
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor:'rgba(255, 193, 193, 0.5)'
   },
-  picker: {
-    height: moderateScale(50),
-    width: moderateScale(200),
-    marginBottom: moderateScale(20),
+  modalContent: {
+    backgroundColor: "white",
+    padding: moderateScale(20),
+    borderRadius: moderateScale(10),
+    width: moderateScale(300),
   },
-  pickerButtonContainer: {
-    marginBottom: moderateScale(50),
+  modalTitle: {
+    fontSize: moderateScale(18),
+    fontWeight: "bold",
+    marginBottom: moderateScale(10),
+  },
+  timeOption: {
+    padding: moderateScale(10),
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
   },
   disabledButton: {
     backgroundColor: "#ccc",
-    
   },
 });
 
