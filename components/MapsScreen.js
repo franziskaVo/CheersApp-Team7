@@ -195,7 +195,7 @@ const MapsScreen = () => {
                   };
                 } else {
                   // Remove location from Realtime Database
-                  await set(ref(FirebaseRTDB, select/${userId}), null);
+                  await set(ref(FirebaseRTDB, `select/${userId}`), null);
                 }
               });
               const resolvedLocations = await Promise.all(locations);
