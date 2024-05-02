@@ -1,6 +1,140 @@
+// import React, { useState, useEffect, useCallback } from "react";
+// import { StyleSheet, Text, View, ScrollView, Image, Alert, Pressable } from "react-native";
+// import { db } from "../firebase"; // Import db and userRef from firebase.js
+// import {
+//   collection,
+//   getDocs,
+//   query,
+//   where,
+//   doc,
+//   getDoc,
+// } from "firebase/firestore";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+// import { useNavigation } from '@react-navigation/native';
+// import { moderateScale } from "../Metrics";
+
+// const FriendListScreen = ({ userId }) => {
+//   const [friendList, setFriendList] = useState([]); // State to store friend list
+//   const [friendsData, setFriendsData] = useState([]); // State to store friend details
+//   const navigation = useNavigation();
+
+
+//   useEffect(() => {
+//     const fetchFriendList = async () => {
+//       try {
+//         const userRef = doc(db, "user", userId);
+//         const userDoc = await getDoc(userRef);
+//         if (userDoc.exists()) {
+//           const userData = userDoc.data();
+//           setFriendList(userData.friends || []);
+//         }
+//       } catch (error) {
+//         console.error("Error fetching friend list:", error);
+//       }
+//     };
+
+//     fetchFriendList();
+//   }, [userId]);
+
+//   useEffect(() => {
+//     const fetchFriendsData = async () => {
+//       try {
+//         const friendsDataPromises = friendList.map(async (friendId) => {
+//           const friendRef = doc(db, "user", friendId);
+//           const friendDoc = await getDoc(friendRef);
+//           return friendDoc.data();
+//         });
+//         const friendsData = await Promise.all(friendsDataPromises);
+//         setFriendsData(friendsData.filter((friend) => friend)); // Filter out null values
+//       } catch (error) {
+//         console.error("Error fetching friends data:", error);
+//       }
+//     };
+
+//     fetchFriendsData();
+//   }, [friendList]);
+
+
+//   //---------get data from async storage and display it--------
+
+
+//   const fetchFriendList = useCallback(async () => {
+//     try {
+//       const friendsData = await AsyncStorage.getItem("friendList");
+//       if (friendsData) {
+//         setFriendsData(JSON.parse(friendsData));
+//       }
+//     } catch (error) {
+//       console.error("Error fetching friendsData: ", error);
+//     }
+//   }, []);
+  
+
+//   useEffect(() => {
+//     const unsubscribe = navigation.addListener("focus", () => {
+//       fetchFriendList();
+//     });
+//     return unsubscribe;
+//   }, [navigation, fetchFriendList]);
+
+  
+
+//   const clearFriendsList = async () => {
+//     try {
+//       await AsyncStorage.removeItem("friendList"); // Corrected key name
+//       setFriendsData([]);
+//       Alert.alert("Friends list cleared!");
+//     } catch (error) {
+//       console.error("Error clearing friends list: ", error);
+//     }
+//   };
+  
+
+//   return (
+//     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+//       <View style={styles.container}>
+//         {friendsData && friendsData.length > 0 ? (
+//           friendsData.map((friend, index) => (
+//             <View style={styles.friendContainer} key={index}>
+//               {friend.profileImage && (
+//                 <Image
+//                   source={{ uri: friend.profileImage }}
+//                   style={styles.profileImage}
+//                 />
+//               )}
+//               <Text style={styles.friendInfoHeader}>Name:</Text>
+//               <Text style={styles.friendInfo}>{friend.name}</Text>
+//               <Text style={styles.friendInfoHeader}>Age:</Text>
+//               <Text style={styles.friendInfo}>{friend.age}</Text>
+//               <Text style={styles.friendInfoHeader}>Hobby:</Text>
+//               <Text style={styles.friendInfo}>{friend.hobby}</Text>
+//               <Text style={styles.friendInfoHeader}>Favorite Drink:</Text>
+//               <Text style={styles.friendInfo}>{friend.favoriteDrink}</Text>
+//             </View>
+//           ))
+//         ) : (
+//           <Text>No friends found.</Text>
+//         )}
+//         <Pressable style={styles.clearButton} onPress={clearFriendsList}>
+//                 <Text style={styles.scoreButtonText}>CLEAR LIST</Text>
+//               </Pressable>
+//       </View>
+//     </ScrollView>
+//   );
+// };
+
 import React, { useState, useEffect, useCallback } from "react";
-import { StyleSheet, Text, View, ScrollView, Image, Alert, Pressable } from "react-native";
-import { db } from "../firebase"; // Import db and userRef from firebase.js
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Image,
+  Alert,
+  Pressable,
+  Modal,
+} from "react-native";
+import { db, userDetails } from "../firebase"; // Import db and userRef from firebase.js
 import {
   collection,
   getDocs,
@@ -10,14 +144,15 @@ import {
   getDoc,
 } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import { moderateScale } from "../Metrics";
 
 const FriendListScreen = ({ userId }) => {
   const [friendList, setFriendList] = useState([]); // State to store friend list
   const [friendsData, setFriendsData] = useState([]); // State to store friend details
+  const [selectedFriend, setSelectedFriend] = useState(null); // State to store the selected friend
+  const [modalVisible, setModalVisible] = useState(false); // State to control modal visibility
   const navigation = useNavigation();
-
 
   useEffect(() => {
     const fetchFriendList = async () => {
@@ -54,9 +189,7 @@ const FriendListScreen = ({ userId }) => {
     fetchFriendsData();
   }, [friendList]);
 
-
   //---------get data from async storage and display it--------
-
 
   const fetchFriendList = useCallback(async () => {
     try {
@@ -68,7 +201,6 @@ const FriendListScreen = ({ userId }) => {
       console.error("Error fetching friendsData: ", error);
     }
   }, []);
-  
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -76,8 +208,6 @@ const FriendListScreen = ({ userId }) => {
     });
     return unsubscribe;
   }, [navigation, fetchFriendList]);
-
-  
 
   const clearFriendsList = async () => {
     try {
@@ -88,36 +218,63 @@ const FriendListScreen = ({ userId }) => {
       console.error("Error clearing friends list: ", error);
     }
   };
-  
+
+  const openFriendDetails = (friend) => {
+    setSelectedFriend(friend);
+    setModalVisible(true);
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <View style={styles.container}>
         {friendsData && friendsData.length > 0 ? (
           friendsData.map((friend, index) => (
-            <View style={styles.friendContainer} key={index}>
-              {friend.profileImage && (
-                <Image
-                  source={{ uri: friend.profileImage }}
-                  style={styles.profileImage}
-                />
-              )}
-              <Text style={styles.friendInfoHeader}>Name:</Text>
-              <Text style={styles.friendInfo}>{friend.name}</Text>
-              <Text style={styles.friendInfoHeader}>Age:</Text>
-              <Text style={styles.friendInfo}>{friend.age}</Text>
-              <Text style={styles.friendInfoHeader}>Hobby:</Text>
-              <Text style={styles.friendInfo}>{friend.hobby}</Text>
-              <Text style={styles.friendInfoHeader}>Favorite Drink:</Text>
-              <Text style={styles.friendInfo}>{friend.favoriteDrink}</Text>
-            </View>
+            <Pressable
+              style={styles.friendContainer}
+              onPress={() => openFriendDetails(friend)}
+              key={index}
+            >
+              <Text style={styles.friendInfoHeader}>{friend.name}</Text>
+            </Pressable>
           ))
         ) : (
           <Text>No friends found.</Text>
         )}
         <Pressable style={styles.clearButton} onPress={clearFriendsList}>
-                <Text style={styles.scoreButtonText}>CLEAR LIST</Text>
-              </Pressable>
+          <Text style={styles.scoreButtonText}>CLEAR LIST</Text>
+        </Pressable>
+
+        {/* Modal to display friend details */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            {selectedFriend && (
+              <View style={styles.modalContent}>
+                <Text style={styles.modalHeader}>Friend Details</Text>
+                <Text style={styles.modalText}>
+                  Name: {selectedFriend.name}
+                </Text>
+                <Text style={styles.modalText}>Age: {selectedFriend.age}</Text>
+                <Text style={styles.modalText}>
+                  Hobby: {selectedFriend.hobby}
+                </Text>
+                <Text style={styles.modalText}>
+                  Favorite Drink: {selectedFriend.favoriteDrink}
+                </Text>
+                <Pressable
+                  style={styles.closeButton}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <Text style={styles.closeButtonText}>Close</Text>
+                </Pressable>
+              </View>
+            )}
+          </View>
+        </Modal>
       </View>
     </ScrollView>
   );

@@ -41,7 +41,11 @@
 //   }, []);
 
 //   return (
-//     <Tab.Navigator>
+//     <Tab.Navigator
+//       screenOptions={{
+//         tabBarIndicatorStyle: { backgroundColor: "pink" },
+//       }}
+//     >
 //       <Tab.Screen name="All Contacts">
 //         {(props) => (
 //           <AllContactsScreen {...props} userData={userData} loading={loading} />
@@ -55,7 +59,6 @@
 // };
 
 // export default ContactScreen;
-
 
 import React, { useState, useEffect } from "react";
 import {
